@@ -94,9 +94,8 @@ drinks_content %>%
 
 ```{r}
 drinks_content %>% 
-  group_by(Beverage_category, Beverage, Beverage_prep) %>% 
-  summarise(Avg_calories = mean(Calories, na.rm = TRUE)) %>% 
+  select(Beverage_category, Beverage, Beverage_prep, Calories) %>% 
   filter(Beverage_category == "Coffee") %>% 
-  arrange(Avg_calories) %>% 
+  arrange(Calories) %>% 
   head(1)
 ```
