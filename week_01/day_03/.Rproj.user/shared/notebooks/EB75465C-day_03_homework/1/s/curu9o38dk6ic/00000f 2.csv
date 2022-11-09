@@ -1,0 +1,25 @@
+"0","glimpse(movie_data)"
+"1","Rows: 4,803"
+"1",""
+"1","
+"
+"1","Columns: 13"
+"1",""
+"1","
+"
+"1","$ original_title    [3m[38;5;246m<chr>[39m[23m ""Avatar"", ""Pirates of the Caribbean: At…
+$ title             [3m[38;5;246m<chr>[39m[23m ""Avatar"", ""Pirates of the Caribbean: At…
+$ homepage          [3m[38;5;246m<chr>[39m[23m ""http://www.avatarmovie.com/"", ""http://…
+$ budget            [3m[38;5;246m<dbl>[39m[23m 2.37e+08, 3.00e+08, 2.45e+08, 2.50e+08,…
+$ original_language [3m[38;5;246m<chr>[39m[23m ""en"", ""en"", ""en"", ""en"", ""en"", ""en"", ""en…
+$ overview          [3m[38;5;246m<chr>[39m[23m ""In the 22nd century, a paraplegic Mari…
+$ popularity        [3m[38;5;246m<dbl>[39m[23m 150.43758, 139.08262, 107.37679, 112.31…
+$ release_date      [3m[38;5;246m<chr>[39m[23m ""10/12/2009"", ""19/05/2007"", ""26/10/2015…
+$ revenue           [3m[38;5;246m<dbl>[39m[23m 2787965087, 961000000, 880674609, 10849…
+$ runtime           [3m[38;5;246m<dbl>[39m[23m 162, 169, 148, 165, 132, 139, 100, 141,…
+$ tagline           [3m[38;5;246m<chr>[39m[23m ""Enter the World of Pandora."", ""At the …
+$ vote_average      [3m[38;5;246m<dbl>[39m[23m 7.2, 6.9, 6.3, 7.6, 6.1, 5.9, 7.4, 7.3,…
+$ vote_count        [3m[38;5;246m<dbl>[39m[23m 11800, 4500, 4466, 9106, 2124, 3576, 33…"
+"1",""
+"1","
+"

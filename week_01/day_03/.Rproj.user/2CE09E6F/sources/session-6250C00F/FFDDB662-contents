@@ -129,14 +129,6 @@ summarise(movies_imputed, count = sum(budget == 100))
 
 # EXTENSION Q1
 
-
-```{r}
-movies_imputed %>% 
-  arrange(desc(budget)) %>% 
-  tail(5)
-```
-
-
 # label budgets as small, medium or big
 # assume we use movies_imputed variable
 
@@ -163,7 +155,7 @@ movie_budgets %>%
 movie_budgets %>% 
   select(budget, budget_type) %>% 
   arrange(desc(budget)) %>% 
-  tail(6)
+  tail(5)
 ```
 
 
