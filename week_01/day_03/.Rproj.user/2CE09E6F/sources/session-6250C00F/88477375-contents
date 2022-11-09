@@ -1,0 +1,43 @@
+---
+title: "day_03"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+video_games <- read_csv("data/steam-200k-sample.csv", 
+         skip = 4, 
+         col_types = cols('bought online' = col_logical()))
+```
+
+```{r}
+video_games %>% 
+  names()
+```
+
+```{r}
+library(janitor)
+```
+
+```{r}
+video_games_clean <- video_games %>% 
+  clean_names()
+```
+```{r}
+video_games_clean %>% 
+  names()
+```
+
+```{r}
+video_games_renamed <- video_games %>% 
+  rename("customer_id" = "customer id",
+         "game_name" = "game name",
+         "activity" = "what",
+         "playing_hours" = "value",
+         "bought_online" = "bought online")
+
+video_games_renamed %>% names()
+```

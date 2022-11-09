@@ -1,0 +1,4 @@
+"0","movie_budgets %>% "
+"0","  select(budget, budget_type) %>% "
+"0","  arrange(desc(budget)) %>% "
+"0","  head(5)"

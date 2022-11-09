@@ -1,0 +1,4 @@
+"0","```r
+charges_numeric %>% 
+  summarise(count = sum(is.na(total_charges)))
+```"

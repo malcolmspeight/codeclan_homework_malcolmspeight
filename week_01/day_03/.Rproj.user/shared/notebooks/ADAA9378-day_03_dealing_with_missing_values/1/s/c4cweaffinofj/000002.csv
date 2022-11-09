@@ -1,0 +1,4 @@
+"0","```r
+comms_data %>% 
+  drop_na(monthly_charges)
+```"

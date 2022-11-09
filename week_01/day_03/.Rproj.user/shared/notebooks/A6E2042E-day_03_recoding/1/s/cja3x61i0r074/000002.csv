@@ -1,0 +1,7 @@
+"0","```r
+letters <- c(\"a\", \"B\", \"c\")
+
+if_else(letters == \"B\", \"b\", letters)
+```"
+"1","[1] \"a\" \"b\" \"c\"
+"

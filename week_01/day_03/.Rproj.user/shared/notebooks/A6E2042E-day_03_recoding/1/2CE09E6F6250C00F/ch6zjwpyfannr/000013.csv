@@ -1,0 +1,8 @@
+"0","students_big %>% "
+"0","  select(region, travel_to_school) %>% "
+"0","  mutate(estimated_travel_time = case_when("
+"0","    region == ""London"" ~ 60, "
+"0","    travel_to_school == ""Walk"" ~ 10, "
+"0","    travel_to_school == ""Car"" ~ 20, "
+"0","    TRUE ~ 30"
+"0","  ))"

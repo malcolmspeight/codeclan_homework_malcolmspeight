@@ -1,0 +1,13 @@
+"0","```r
+comms_data <- read_csv(\"data/telecom_data.csv\")
+```"
+"1","Rows: 35 Columns: 5── Column specification ────────────────────────────────────────────
+Delimiter: \",\"
+chr (3): total_charges, payment_method, churn
+dbl (2): customerID, monthly_charges
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","```r
+comms_data
+```"

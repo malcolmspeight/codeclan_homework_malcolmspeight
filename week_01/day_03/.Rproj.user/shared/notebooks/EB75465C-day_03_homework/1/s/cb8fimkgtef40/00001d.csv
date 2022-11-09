@@ -1,0 +1,4 @@
+"0","movies_imputed <- movies_imputed %>% "
+"0","  mutate(budget = if_else(budget < 100, "
+"0","                          median(budget, na.rm = TRUE),"
+"0","                          budget)) "

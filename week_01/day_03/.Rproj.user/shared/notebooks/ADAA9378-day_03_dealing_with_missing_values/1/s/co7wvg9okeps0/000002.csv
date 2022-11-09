@@ -1,0 +1,4 @@
+"0","```r
+charges_numeric %>% 
+  filter(is.na(total_charges))
+```"
