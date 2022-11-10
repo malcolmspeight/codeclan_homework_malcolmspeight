@@ -1,0 +1,5 @@
+"0","# column title chosen as it contains the english titles"
+"0","movies_selected <- movies %>% "
+"0","  select(title, runtime, budget)"
+"0",""
+"0","movies_selected"

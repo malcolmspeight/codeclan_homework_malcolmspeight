@@ -135,7 +135,7 @@ summarise(movies_imputed, count = sum(budget == 100))
 ```{r}
 movie_budgets <- movies_imputed %>% 
   mutate(budget_type = case_when(
-    budget >= 4e6 ~ "Big budget",
+    budget >= 40e6 ~ "Big budget",
     budget >= 12e6 ~ "Medium budget",
     budget < 12e6 ~ "Small budget"
   )) 
