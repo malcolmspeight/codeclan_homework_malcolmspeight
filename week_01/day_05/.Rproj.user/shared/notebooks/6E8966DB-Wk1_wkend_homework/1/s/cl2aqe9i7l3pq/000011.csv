@@ -1,0 +1,4 @@
+"0","books_data %>% "
+"0","  group_by(authors) %>% "
+"0","  summarise(avg_page_count = mean(num_pages)) %>% "
+"0","  slice_max(avg_page_count, n = 5, with_ties = FALSE)"

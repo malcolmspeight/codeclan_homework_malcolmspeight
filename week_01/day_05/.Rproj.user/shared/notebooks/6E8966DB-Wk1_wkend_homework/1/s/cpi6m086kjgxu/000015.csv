@@ -1,0 +1,4 @@
+"0","books_data %>% "
+"0","  group_by(title) %>% "
+"0","  summarise(reviews = sum(text_reviews_count)) %>% "
+"0","  slice_max(reviews, n = 5, with_ties = FALSE)"

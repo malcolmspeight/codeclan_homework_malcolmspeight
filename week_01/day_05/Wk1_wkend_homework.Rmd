@@ -1,0 +1,115 @@
+---
+title: "Wk1 Weekend homework"
+output: html_notebook
+---
+
+```{r}
+# install packages  
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+# load books dataset 
+books_data <- read_csv("data/books.csv")
+```
+
+```{r}
+# examine the data
+glimpse(books_data)
+view(books_data)
+```
+
+Q1: Which publisher has published the most books?
+
+```{r}
+books_data %>% 
+  group_by(publisher) %>% 
+  summarise(books_published = n()) %>% 
+  slice_max(books_published, n = 5) # top 5 shown for context
+```
+
+
+Q2: The top 5 rated books?
+
+```{r}
+books_data %>% 
+  select(title, average_rating) %>% 
+  slice_max(average_rating, n = 5, with_ties = FALSE)
+```
+
+
+Q3: Which publisher has the best rating?
+
+Question about rounding - the avg rating for Academia press should be 4.5 not 5. Why is it not displayed as such. 
+
+```{r}
+books_data %>% 
+  group_by(publisher) %>% 
+  summarise(avg_rating = mean(average_rating)) %>% 
+  arrange(desc(avg_rating)) %>% 
+  head(5) # show top 5
+```
+
+Compare result to using slice_max instead of `arrange()` and the `head()`:
+
+```{r}
+books_data %>% 
+  group_by(publisher) %>% 
+  summarise(avg_rating = mean(average_rating)) %>% 
+  slice_max(avg_rating, n = 5, with_ties = FALSE)
+```
+
+
+
+Q4:  Which author has the highest average page count?
+
+```{r}
+books_data %>% 
+  group_by(authors) %>% 
+  summarise(avg_page_count = mean(num_pages)) %>% 
+  slice_max(avg_page_count, n = 5, with_ties = FALSE)
+```
+
+Q5: How many books are anonymous?
+
+```{r}
+books_data %>% 
+  filter(authors == "Anonymous") %>% 
+  summarise(authors, book_count = n())
+```
+
+Q6: The top 5 languages used?
+
+```{r}
+books_data %>% 
+  group_by(language_code) %>% 
+  summarise(count = n()) %>% 
+  slice_max(count, n = 5, with_ties = FALSE)
+```
+
+Q7: The most reviewed books?
+
+```{r}
+books_data %>% 
+  group_by(title) %>% 
+  summarise(reviews = sum(text_reviews_count)) %>% 
+  slice_max(reviews, n = 5, with_ties = FALSE)
+```
+
+
+Q8: The most published authors?
+
+```{r}
+books_data %>% 
+  group_by(authors) %>% 
+  summarise(published_books = n()) %>% 
+  slice_max(published_books, n = 5, with_ties = FALSE)
+```
+
+
+
+
+
+
+

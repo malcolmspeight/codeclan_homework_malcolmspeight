@@ -1,0 +1,4 @@
+"0","books_data %>% "
+"0","  group_by(language_code) %>% "
+"0","  summarise(count = n()) %>% "
+"0","  slice_max(count, n = 5, with_ties = FALSE)"

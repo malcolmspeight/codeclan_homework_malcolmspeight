@@ -1,0 +1,4 @@
+"0","books_data %>% "
+"0","  group_by(publisher) %>% "
+"0","  summarise(books_published = n()) %>% "
+"0","  slice_max(books_published, n = 5)"

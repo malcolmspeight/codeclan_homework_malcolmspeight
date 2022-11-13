@@ -1,0 +1,3 @@
+"0","books_data %>% "
+"0","  filter(authors == ""Anonymous"") %>% "
+"0","  summarise(authors, book_count = n())"

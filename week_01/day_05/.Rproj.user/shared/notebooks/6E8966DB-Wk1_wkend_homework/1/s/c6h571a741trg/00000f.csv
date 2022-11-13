@@ -1,0 +1,5 @@
+"0","books_data %>% "
+"0","  group_by(publisher) %>% "
+"0","  summarise(avg_rating = mean(average_rating)) %>% "
+"0","  arrange(desc(avg_rating)) %>% "
+"0","  head(5)"
