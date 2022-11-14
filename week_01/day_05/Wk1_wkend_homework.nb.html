@@ -1759,6 +1759,14 @@ display: none;
 library(tidyverse)
 library(janitor)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYamFuaXRvcuKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6c3RhdHPigJk6XG5cbiAgICBjaGlzcS50ZXN0LCBmaXNoZXIudGVzdFxuIn0= -->
+<pre><code>
+Attaching package: ‘janitor’
+
+The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -1767,6 +1775,14 @@ library(janitor)</code></pre>
 <pre class="r"><code># load books dataset 
 books_data &lt;- read_csv(&quot;data/books.csv&quot;)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUm93czogMTExMjMgQ29sdW1uczogMTPilIDilIAgQ29sdW1uIHNwZWNpZmljYXRpb24g4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXG5EZWxpbWl0ZXI6IFwiLFwiXG5jaHIgKDcpOiB0aXRsZSwgYXV0aG9ycywgaXNibiwgaXNibjEzLCBsYW5ndWFnZV9jb2RlLCBwdWJsaWNhdGkuLi5cbmRibCAoNik6IHJvd2lkLCBib29rSUQsIGF2ZXJhZ2VfcmF0aW5nLCBudW1fcGFnZXMsIHJhdGluZ3NfY291bi4uLlxu4oS5IFVzZSBgc3BlYygpYCB0byByZXRyaWV2ZSB0aGUgZnVsbCBjb2x1bW4gc3BlY2lmaWNhdGlvbiBmb3IgdGhpcyBkYXRhLlxu4oS5IFNwZWNpZnkgdGhlIGNvbHVtbiB0eXBlcyBvciBzZXQgYHNob3dfY29sX3R5cGVzID0gRkFMU0VgIHRvIHF1aWV0IHRoaXMgbWVzc2FnZS5cbiJ9 -->
+<pre><code>Rows: 11123 Columns: 13── Column specification ───────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (7): title, authors, isbn, isbn13, language_code, publicati...
+dbl (6): rowid, bookID, average_rating, num_pages, ratings_coun...
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -1775,22 +1791,22 @@ books_data &lt;- read_csv(&quot;data/books.csv&quot;)</code></pre>
 <pre class="r"><code># examine the data
 glimpse(books_data)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUm93czogMTEsMTIzXG5Db2x1bW5zOiAxM1xuJCByb3dpZCAgICAgICAgICAgICAgPGRibD4gMSwgMiwgMywgNCwgNSwgNiwgNywgOCwgOSwgMTAsIDExLCAxMiwg4oCmXG4kIGJvb2tJRCAgICAgICAgICAgICA8ZGJsPiAxLCAyLCA0LCA1LCA4LCA5LCAxMCwgMTIsIDEzLCAxNCwgMTYsIDHigKZcbiQgdGl0bGUgICAgICAgICAgICAgIDxjaHI+IFwiSGFycnkgUG90dGVyIGFuZCB0aGUgSGFsZi1CbG9vZCBQcmluY2XigKZcbiQgYXV0aG9ycyAgICAgICAgICAgIDxjaHI+IFwiSi5LLiBSb3dsaW5nL01hcnkgR3JhbmRQcsOpXCIsIFwiSi5LLiBSb3figKZcbiQgYXZlcmFnZV9yYXRpbmcgICAgIDxkYmw+IDQuNTcsIDQuNDksIDQuNDIsIDQuNTYsIDQuNzgsIDMuNzQsIDQuN+KAplxuJCBpc2JuICAgICAgICAgICAgICAgPGNocj4gXCIwNDM5Nzg1OTYwXCIsIFwiMDQzOTM1ODA3OFwiLCBcIjA0Mzk1NTQ4OTbigKZcbiQgaXNibjEzICAgICAgICAgICAgIDxjaHI+IFwiOTc4MDQzOTc4NTk2OVwiLCBcIjk3ODA0MzkzNTgwNzFcIiwgXCI5Nzgw4oCmXG4kIGxhbmd1YWdlX2NvZGUgICAgICA8Y2hyPiBcImVuZ1wiLCBcImVuZ1wiLCBcImVuZ1wiLCBcImVuZ1wiLCBcImVuZ1wiLCBcImVuLeKAplxuJCBudW1fcGFnZXMgICAgICAgICAgPGRibD4gNjUyLCA4NzAsIDM1MiwgNDM1LCAyNjkwLCAxNTIsIDMzNDIsIDgx4oCmXG4kIHJhdGluZ3NfY291bnQgICAgICA8ZGJsPiAyMDk1NjkwLCAyMTUzMTY3LCA2MzMzLCAyMzM5NTg1LCA0MTQyOCzigKZcbiQgdGV4dF9yZXZpZXdzX2NvdW50IDxkYmw+IDI3NTkxLCAyOTIyMSwgMjQ0LCAzNjMyNSwgMTY0LCAxLCA4MDgsIOKAplxuJCBwdWJsaWNhdGlvbl9kYXRlICAgPGNocj4gXCI5LzE2LzIwMDZcIiwgXCI5LzEvMjAwNFwiLCBcIjExLzEvMjAwM1wiLCBcIuKAplxuJCBwdWJsaXNoZXIgICAgICAgICAgPGNocj4gXCJTY2hvbGFzdGljIEluYy5cIiwgXCJTY2hvbGFzdGljIEluYy5cIiwgXCLigKZcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiUm93czogMTEsMTIzXG5Db2x1bW5zOiAxM1xuJCByb3dpZCAgICAgICAgICAgICAgPGRibD4gMSwgMiwgMywgNCwgNSwgNiwgNywgOCwgOSwgMTAsIDExLCAxMizigKZcbiQgYm9va0lEICAgICAgICAgICAgIDxkYmw+IDEsIDIsIDQsIDUsIDgsIDksIDEwLCAxMiwgMTMsIDE0LCAxNiwg4oCmXG4kIHRpdGxlICAgICAgICAgICAgICA8Y2hyPiBcIkhhcnJ5IFBvdHRlciBhbmQgdGhlIEhhbGYtQmxvb2QgUHJpbmPigKZcbiQgYXV0aG9ycyAgICAgICAgICAgIDxjaHI+IFwiSi5LLiBSb3dsaW5nL01hcnkgR3JhbmRQcsOpXCIsIFwiSi5LLiBSb+KAplxuJCBhdmVyYWdlX3JhdGluZyAgICAgPGRibD4gNC41NywgNC40OSwgNC40MiwgNC41NiwgNC43OCwgMy43NCwgNC7igKZcbiQgaXNibiAgICAgICAgICAgICAgIDxjaHI+IFwiMDQzOTc4NTk2MFwiLCBcIjA0MzkzNTgwNzhcIiwgXCIwNDM5NTU0ODnigKZcbiQgaXNibjEzICAgICAgICAgICAgIDxjaHI+IFwiOTc4MDQzOTc4NTk2OVwiLCBcIjk3ODA0MzkzNTgwNzFcIiwgXCI5NzjigKZcbiQgbGFuZ3VhZ2VfY29kZSAgICAgIDxjaHI+IFwiZW5nXCIsIFwiZW5nXCIsIFwiZW5nXCIsIFwiZW5nXCIsIFwiZW5nXCIsIFwiZW7igKZcbiQgbnVtX3BhZ2VzICAgICAgICAgIDxkYmw+IDY1MiwgODcwLCAzNTIsIDQzNSwgMjY5MCwgMTUyLCAzMzQyLCA44oCmXG4kIHJhdGluZ3NfY291bnQgICAgICA8ZGJsPiAyMDk1NjkwLCAyMTUzMTY3LCA2MzMzLCAyMzM5NTg1LCA0MTQyOOKAplxuJCB0ZXh0X3Jldmlld3NfY291bnQgPGRibD4gMjc1OTEsIDI5MjIxLCAyNDQsIDM2MzI1LCAxNjQsIDEsIDgwOCzigKZcbiQgcHVibGljYXRpb25fZGF0ZSAgIDxjaHI+IFwiOS8xNi8yMDA2XCIsIFwiOS8xLzIwMDRcIiwgXCIxMS8xLzIwMDNcIiwg4oCmXG4kIHB1Ymxpc2hlciAgICAgICAgICA8Y2hyPiBcIlNjaG9sYXN0aWMgSW5jLlwiLCBcIlNjaG9sYXN0aWMgSW5jLlwiLCDigKZcbiJ9 -->
 <pre><code>Rows: 11,123
 Columns: 13
-$ rowid              &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, …
-$ bookID             &lt;dbl&gt; 1, 2, 4, 5, 8, 9, 10, 12, 13, 14, 16, 1…
-$ title              &lt;chr&gt; &quot;Harry Potter and the Half-Blood Prince…
-$ authors            &lt;chr&gt; &quot;J.K. Rowling/Mary GrandPré&quot;, &quot;J.K. Row…
-$ average_rating     &lt;dbl&gt; 4.57, 4.49, 4.42, 4.56, 4.78, 3.74, 4.7…
-$ isbn               &lt;chr&gt; &quot;0439785960&quot;, &quot;0439358078&quot;, &quot;0439554896…
-$ isbn13             &lt;chr&gt; &quot;9780439785969&quot;, &quot;9780439358071&quot;, &quot;9780…
-$ language_code      &lt;chr&gt; &quot;eng&quot;, &quot;eng&quot;, &quot;eng&quot;, &quot;eng&quot;, &quot;eng&quot;, &quot;en-…
-$ num_pages          &lt;dbl&gt; 652, 870, 352, 435, 2690, 152, 3342, 81…
-$ ratings_count      &lt;dbl&gt; 2095690, 2153167, 6333, 2339585, 41428,…
-$ text_reviews_count &lt;dbl&gt; 27591, 29221, 244, 36325, 164, 1, 808, …
-$ publication_date   &lt;chr&gt; &quot;9/16/2006&quot;, &quot;9/1/2004&quot;, &quot;11/1/2003&quot;, &quot;…
-$ publisher          &lt;chr&gt; &quot;Scholastic Inc.&quot;, &quot;Scholastic Inc.&quot;, &quot;…</code></pre>
+$ rowid              &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,…
+$ bookID             &lt;dbl&gt; 1, 2, 4, 5, 8, 9, 10, 12, 13, 14, 16, …
+$ title              &lt;chr&gt; &quot;Harry Potter and the Half-Blood Princ…
+$ authors            &lt;chr&gt; &quot;J.K. Rowling/Mary GrandPré&quot;, &quot;J.K. Ro…
+$ average_rating     &lt;dbl&gt; 4.57, 4.49, 4.42, 4.56, 4.78, 3.74, 4.…
+$ isbn               &lt;chr&gt; &quot;0439785960&quot;, &quot;0439358078&quot;, &quot;043955489…
+$ isbn13             &lt;chr&gt; &quot;9780439785969&quot;, &quot;9780439358071&quot;, &quot;978…
+$ language_code      &lt;chr&gt; &quot;eng&quot;, &quot;eng&quot;, &quot;eng&quot;, &quot;eng&quot;, &quot;eng&quot;, &quot;en…
+$ num_pages          &lt;dbl&gt; 652, 870, 352, 435, 2690, 152, 3342, 8…
+$ ratings_count      &lt;dbl&gt; 2095690, 2153167, 6333, 2339585, 41428…
+$ text_reviews_count &lt;dbl&gt; 27591, 29221, 244, 36325, 164, 1, 808,…
+$ publication_date   &lt;chr&gt; &quot;9/16/2006&quot;, &quot;9/1/2004&quot;, &quot;11/1/2003&quot;, …
+$ publisher          &lt;chr&gt; &quot;Scholastic Inc.&quot;, &quot;Scholastic Inc.&quot;, …</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmlldyhib29rc19kYXRhKVxuYGBgIn0= -->
 <pre class="r"><code>view(books_data)</code></pre>
@@ -1800,13 +1816,13 @@ $ publisher          &lt;chr&gt; &quot;Scholastic Inc.&quot;, &quot;Scholastic I
 <p>Q1: Which publisher has published the most books?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KHB1Ymxpc2hlcikgJT4lIFxuICBzdW1tYXJpc2UoYm9va3NfcHVibGlzaGVkID0gbigpKSAlPiUgXG4gIHNsaWNlX21heChib29rc19wdWJsaXNoZWQsIG4gPSA1KVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KHB1Ymxpc2hlcikgJT4lIFxuICBzdW1tYXJpc2UoYm9va3NfcHVibGlzaGVkID0gbigpKSAlPiUgXG4gIHNsaWNlX21heChib29rc19wdWJsaXNoZWQsIG4gPSA1KSAjIHRvcCA1IHNob3duIGZvciBjb250ZXh0XG5gYGAifQ== -->
 <pre class="r"><code>books_data %&gt;% 
   group_by(publisher) %&gt;% 
   summarise(books_published = n()) %&gt;% 
-  slice_max(books_published, n = 5)</code></pre>
+  slice_max(books_published, n = 5) # top 5 shown for context</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTJSelVyRU1CQ0FwOW10U3d2VndyNkFMOUNpZVBIa1lSVnZnb2pLM2lSdDQyN1ltSlFtUlk4K2dpZWZ4WGNUdGs3YUJOd1VwcDM1NXIvemNMTytTTmNwQU14Z1RpS1l4YWhDL1BSNFcxd0NFalFpbUVOaXZ4OFl0RVRGd3R4R09jZmltVXRETjh5WjJUMlRtNTdMMDVWU08rMWc3dUcxb0ZyejJ2UHNqblpjc3U0d2VFV0ZvTktndzNFTUhCdENkSVZpWi94QitVYjVDcWFNSlgxajJrMUlIRXphdmhKY2Ixbm53RWxseTc1NDNBUkZrazY5bDc2UTdVdys4VFVNdzIvWXJiYnJ1RzRlcGcwMXRIenRNQit0ZlpDeVVLM2hTbUlTV1U0N0hTUkhYUUR5WHRwSm1xTGU5bkpYbkovWkRxTi9laktueC85ME12VWtRM0NwSXp3Qy9sUS92S0FWRTg0NHhwWEhqY3NXRDJMOEtraDFhWlNoUGk2dGxmQmtYQTcyZjF4WXB2VkVBZ0FBIn0= -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTJSdlU3RE1CQ0FMMjVEbFVpaGxmb0N2RUN6TU1ERVVCQWJFa0tBdWlFbk1hMVZZMGUySXhoNUJDYWVoWGREYWpnbnRrUWQ2Wks3Ny81ekR6ZWI4M3lUQThBRXBpU0JTWW9xcEUrUHQ2dExRSUpHQWxQSTNQY0RnNWFvT0xod1VkNHhlK2JTMGkzelpuSFA1TGJqOG15dDFONTR1QWp3V2xCamVCMTRjVWMxbDB3ZkI2K3BFRlJhZEhpT2dVTkRTSzVRM0l3L0tOOG9YOUdVcWFSdnpQZ0ppWWRaMjFXQ214M1RIc3dyVi9ZbDRDWXFrbW4xWG9aQ3JqUDV4RmZmOTc5eHQ5cXQ0N3NGbURmVTB2SlZZejVhaHlobHBsckxsY1Frc2h4M09rcE9kQVRtblhTVE5LdDYxOG45NnNJMUdOempVM2c5L2FlVHNTWHBvME9kNEEzd240YlpCYTJZOE1ZcGJqd3NYTFo0RHhzMlFXcEtxeXdOY1htdFJDRERibkQ0QTV6emMycERBZ0FBIn0= -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["publisher"],"name":[1],"type":["chr"],"align":["left"]},{"label":["books_published"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Vintage","2":"318"},{"1":"Penguin Books","2":"261"},{"1":"Penguin Classics","2":"184"},{"1":"Mariner Books","2":"150"},{"1":"Ballantine Books","2":"144"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
@@ -1823,7 +1839,7 @@ $ publisher          &lt;chr&gt; &quot;Scholastic Inc.&quot;, &quot;Scholastic I
   select(title, average_rating) %&gt;% 
   slice_max(average_rating, n = 5, with_ties = FALSE)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBNFZTd1c0VE1SQjEwaTZva1ZxUXlnY01OemdrVVVCSWFFK2tKYTJnSVZSdG9JVUxjdGFUWGF0ZU85amVOTG5sSS9nRmZvemZRR29ZYjdJQ2xnTSsyRFBQTTIvOFpuengrdnA1NjdyRkdOdGh1ODBHMjRuSVpOR0g4VW43SlNPRW5BYmJaWHZoWEZEUUlSa0JmQmlpdGhjdmprMXVVRWlPMEl1aG4yVGNvbmJvdW9PdmhmUjBqb29KN1IvUnpUaDJ6L21pMjUrajJ5WS92cEpLWVE0QzRjd1lMWFVhdzVCN2hITXV0U2ZYTWJZS2dkK0h4R1c1THl6Q3NiU0pRamd0cE1BWWpxd1VLWUkzTUthQWlmU1o1REVNNW1pWFpPb1VQcGtDUm9nQ1RveUZ5eUpKMExscG9lQWZSZ2ZqakhzNFJROW5VZ1JQNnB2QUFHT3VOc2FWbGVGVlAxYmZ1Qll3TlBPQS9pYmFxdXE5azBJUUh5N2d5RmhUcEJrOGVaUHpsQ3FZS2ZSenRES2hONDd3RnQ2aWRiaDh1azJNUHh1TkljWm5DQU10NkRLbVp5QThvMm9YaGRabzRmMTBLaFBKRlZ4NktvcnBjdE1JeWo0SVUzbjFpSlhyZjJkdHZKSG1PVTFsTTlwbUJYcnBWU1hxZ0ZOTFNjTVhxa3FxYS9sNzF0eDJLbzc5d0xHaWJiMWUvNndYU2hSM1ZhRUtiQW51ZVdkcUtaKzh1MXJLZlRQejBtaEthaDZXSCsvdjVJYXRBUStvVWNRazJrbFc2SnQyTHhRb3J6ZHJmMnRIZjlqTlRjbm11dmE1NzZGT3BhNWFFQ2srUVZYMWd4U1hnanN6UzMrMVVrS282M2pqZVJYWFNveXFrRklidS9zRmwvOVdEM2NEQUFBPSJ9 -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBNFZTd1c0VE1SQjF0ZzJva1ZxUXlnY01OemcwVVVGSWFFK2tKYTJnSVZSdG9JVUxjdGF6dTFZZE85amVOTG5sSS9nRmZvemZRR29ZNzJZRkxBZDhzR2VlWjk3NGplZmk5Zlh6em5XSE1iYkZ0cU1XMjJxVHlkb2Z4aWNITHhraDVMVFlOdHNKNTRLQzlza0k0TU1RdGJsNGNXeW1Cb1hrQ0ljeDlKT2NXOVFPWFcvd3RaQ2V6bEV4b2YwanVobkgzamxmOVBwemRKdmt4MWRTS1p5Q1FEZ3pSa3VkeFREa0h1R2NTKzNKZFl5dFF1RDNJWEZaN2d1TGNDeHRvaEJPQ3lrd2hpTXJSWWJnRFl3cFlDSjlMbmtNZ3puYUpaazZnMCttZ0JHaWdCTmo0YkpJRW5RdUxSVDh3K2hnbkhNUHAramhUSXJnU1gwVEdHRE1WV1ZjV1JsZTlXUDFqV3NCUXpNUDZHK2lqYXJEZDFJSTRzTUZIQmxyaWl5SEoyK21QS01LSm9YK0ZLMU02STBqdklXM2FCMHVuMjRTNDg5R1k0anhPY0pBQzdxTTZSa0l6NmphUmFFMVduaWZwaktSWE1HbHA2S1lMYXRHVVBaZStKVlhqMWk1L25jMnZyZXQrWlIrcGZyYXFBYTk5S29XdGNlcHBhVGhDMVVsMVkzOEhXdHV1elhIYnVCWTBiWmVyMzgyQ3lXS3U3cFFEWFlFOTd5Yldzb243NjZSY3QvTXZEU2FrcUw5Y3ZEK1RtN1pCdkNBR2tWTTRpREpDMzBUSnBsMXl1dHE3VzdzOWg5MlZKV00xbzNodm9jNms3cHVRVnZ4Q2FxNkg2UzRGTnlkV1pyVldnbWhydXVONTNWY0p6R3FSa3B0N080WEo4QWJ3SGNEQUFBPSJ9 -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["title"],"name":[1],"type":["chr"],"align":["left"]},{"label":["average_rating"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Comoediae 1: Acharenses/Equites/Nubes/Vespae/Pax/Aves","2":"5"},{"1":"Willem de Kooning: Late Paintings","2":"5"},{"1":"Literature Circle Guide: Bridge to Terabithia: Everything You Need For Successful Literature Circles That Get Kids Thinking  Talking  Writing—and Loving Literature","2":"5"},{"1":"Middlesex Borough (Images of America: New Jersey)","2":"5"},{"1":"Zone of the Enders: The 2nd Runner Official Strategy Guide","2":"5"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
@@ -1837,14 +1853,14 @@ $ publisher          &lt;chr&gt; &quot;Scholastic Inc.&quot;, &quot;Scholastic I
 4.5 not 5. Why is it not displayed as such.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KHB1Ymxpc2hlcikgJT4lIFxuICBzdW1tYXJpc2UoYXZnX3JhdGluZyA9IG1lYW4oYXZlcmFnZV9yYXRpbmcpKSAlPiUgXG4gIGFycmFuZ2UoZGVzYyhhdmdfcmF0aW5nKSkgJT4lIFxuICBoZWFkKDUpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KHB1Ymxpc2hlcikgJT4lIFxuICBzdW1tYXJpc2UoYXZnX3JhdGluZyA9IG1lYW4oYXZlcmFnZV9yYXRpbmcpKSAlPiUgXG4gIGFycmFuZ2UoZGVzYyhhdmdfcmF0aW5nKSkgJT4lIFxuICBoZWFkKDUpICMgc2hvdyB0b3AgNVxuYGBgIn0= -->
 <pre class="r"><code>books_data %&gt;% 
   group_by(publisher) %&gt;% 
   summarise(avg_rating = mean(average_rating)) %&gt;% 
   arrange(desc(avg_rating)) %&gt;% 
-  head(5)</code></pre>
+  head(5) # show top 5</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBNFdSd1U3RE1BeUcwMjRGVm1rYlVubUFucml0Rnk0Y2dTRUVOelNCdEJ2eVd0TlZ6WklwU1JuY2VHK2tGYWRMSk5ZTE9TVDJGLyt4SFMvdWwxZnhNbWFNRGRnd0ROZ2dJcE5Gcnk4UHMydEdoSnlBRGRuSW5wOFVsSkJoNGJtTmNoZlQyeHdLM0ZRNXBNOEt0WFk0dVpOUzQxZDZtVDdDcmthZFBvbmNLK1pyVUdhSG5LY1VWSHZGZUM0YkJTVWV3Yk1GVk1Jb1JMSW5OdXZOQmV2V2YyZXYvRWpBQnJVclBYUnd0RzFXdk5KclZBN0U4RkcrS1RDVktIdjZrWks3ekw4eHRtOTgwOWEyN1U4L1VjNUIrMFFleGdVWXlONFY2Y25iOXlTbmNtc3FLVWdVSnQzSEhvc0QxUVBUUnRoS2lsbStia1J0SjhYaTd2cXd4czZPL3RqaElXWFk5b1ozZ3FLc0JQcmFPYXlRTzJkQ0hYY05aMXRGSS9DZEVOV1prUVo4WEp4TDdrblhHOXYvQWxzdjlwQlhBZ0FBIn0= -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBNFdSc1U3RE1CQ0czYlFCRXFrdFVuaUFUR3pKd2dJYlVJVG9oaXFRdXFGcmVxUlJYYnV5SFFvYjc0M1VjRTV0aVdiQlEvemY1L3Q5ZC9Ic1lYNFZ6MlBHV0o4TmdoN3JoeVJaK1ByeW1GMHpJaFQwMklCRmR2K2twSVNFaGVjMnl4Mk03d3BZNHFZcUlIMVdxTFhEeWIyVUdyL1N5L1FKZG12VTZWUVUzakZaZ1RJNzVEeWxwTFYzRENleVZsRGlFVHliUVNXTVFpUTlzbFZ2TDFpNy90czc3WWNDTnFoZDY0R0QwYlplOEVxdlVEa1F3MGY1cHNCVW91ejRJeVYzdWI5amFPLzRway9UTkQvZFFnVUg3UXQ1R0MvQlFQNnV5RS9Sdm1NNWxWdFRTVUdtSUdsLzdMRzVwenBnWEF2YnlUSXJWclZZWnplMlFIdDhXRU9ud3o4Nk9KUU1tczdqbmFBb0s0RytkdzRMNUM0WTBjVHR3UGxXMFJQNFNZanEzRWdEUGk4dUpQZWtuWTN0ZndGNURhanpWd0lBQUE9PSJ9 -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["publisher"],"name":[1],"type":["chr"],"align":["left"]},{"label":["avg_rating"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Academica Press","2":"5"},{"1":"Boosey & Hawkes Inc","2":"5"},{"1":"Chartwell Books","2":"5"},{"1":"Courage Books","2":"5"},{"1":"Raintree","2":"5"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
@@ -1863,7 +1879,7 @@ and the <code>head()</code>:</p>
   summarise(avg_rating = mean(average_rating)) %&gt;% 
   slice_max(avg_rating, n = 5, with_ties = FALSE)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBNFdSc1U3RE1CQ0czYlFCR3FrdFVuaUFUR3pKMG9VUktFS3dvUXFrYnVpYUhHbFUxNjVzaDhMR2V5TTFQYWUyUkxQZ0lmN3Y4LzIrdTNqK3NKaEdpNGd4MW1lRG9NZjZJVWtXdnIwK3BqZU1DQVU5Tm1CRHUzOVJVa3pDd2t1YjVRNG1kemtVdUtseVNGNFVhdTF3ZkMrbHh1L2tPbm1DM1JwMThpeHk3NWl0UUprZGNwNVEwdG83UmpOWkt5anhCRjdNb1JKR0laSWUyNnEzVjZ4ZC8rMmQ5a01CRzlTdTljREI0YlplOGtxdlVEa1F3V2Y1cnNCVW91ejRoMHJ1TW4vSHlON3hRNSttYVg2N2hYSU8yaGZ5TUNyQVFQYWh5RS9Sdm1NNWwxdFRTVUdtSUc1LzdLbTVwenBnVWd2YlNaSG1xMXFzMDZrdDBCNGYxOGpwOEk4T2ppV0Rwdk40WnlqS1NxRHZuY01TdVF2R05IRTdjTFpWOUFSK0VxSTZNOUtBejR0eXlUMXBaMlA3QTY5VUI1bFhBZ0FBIn0= -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBNFdSc1U3RE1CQ0czYlFCRXFtbFVuaUFUR3lKUUN5TVFCR0NEVlVnZFVQWDlFaWp1blpsT3hRMjNodXA0WnphRXMyQ2gvaS96L2Y3N3VMcC9ld3Fuc1dNc1Q0YkJEM1dEMG15OFBYbElidG1SQ2pvc1FHTDdQNUpTUWtKQzhjMnl4MmMzaGF3d0hWVlFQcXNVR3VIa3pzcE5YNmw1K2tqYkZlbzB5ZFJlTWRrQ2Nwc2tmT1VrbGJlTVp6SVdrR0pCL0JrQ3BVd0NwSDB5RmE5T1dQdCttL3Z0QjhLV0tOMnJRY09ScHQ2eml1OVJPVkFEQi9sbXdKVGliTGpqNVRjNXY2T29iM2ptejVOMC94MEN4VWN0Qy9rWWJ3QUEvbTdJajlGdTQ3bFdHNU1KUVdaZ3FUOXNZZm1udXFBY1Mxc0o0dXNXTlppbFYxZTJBcnQrWDROblE3LzZHQmZNMmc2cjNlRW9xd0UrdVk1ekpHN1lFUWp0eFBuRzBWdjRFY2hxbk1qRGZpOHVKRGNrM1k0dHZzRmR6NXJxRmdDQUFBPSJ9 -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["publisher"],"name":[1],"type":["chr"],"align":["left"]},{"label":["avg_rating"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Academica Press","2":"5"},{"1":"Boosey & Hawkes Inc","2":"5"},{"1":"Chartwell Books","2":"5"},{"1":"Courage Books","2":"5"},{"1":"Raintree","2":"5"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
@@ -1881,7 +1897,7 @@ and the <code>head()</code>:</p>
   summarise(avg_page_count = mean(num_pages)) %&gt;% 
   slice_max(avg_page_count, n = 5, with_ties = FALSE)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTFTelc0VFFReWVwQTFWSXJVZzlRWG1BY2l1VUM4Y214OGkxS1JTSWFEMlZwbFpaM2VWaldjMVB5MXdRRHdDQis2SUF4ZU92QjVTZzJkL0pMcHpzZjNaL3Z6Wm1yZnptN1BSelVnSWNTQU8rejF4TUdCWERONi9XNHhmQ2tZNDZJbERNUXoySXhlZHNoUEFaNkdxU2Nqcm5LelRKTmVSbkdYZXFDd3ZpdmhDWnlTWGlDbFFVM2R4Q1VaaElhK005dGJGczJnWnliWFN6c2xMVGNya3VObkVDNE1KbWx4dDVTU1MwMEpicTNkTVpiSE01TFhXaVp3WjcxVFdNTDZaSTFGdTVTcVNTN0FsbW5nT0ZLS1ZwbFRIYThkdFdBR3Z3VnRPVDhobG1qNEZwUXZ3S285ZitSUUo1ZFNBcDNzb2tvWjRPQ0V1MjdIT0JuaXhBbStRRkFheXFmSEUrOVlyTXRVS1B1dDRpYm5MWkVoZmdkbWk0YWFUY0tUelAxL0RTY1g1NzIrMS9mV2x0aitmMS9iSGQxRy9SOWNlRU96UU5wZnVOK0FSZU5adldsRW5jSmZlbHBEaXJkS3NxTU13TlBvK2FsbU9BMHNRc3Qvdi8zWkhxUUpzTzZvRlJ3azRpRGFHK3psNjZMUWM2ZExsbXJpcGYxcjloTWZOUGRNQm5ub0tTcEt4eWp4dHgyZGhRSld1MzNIakQvN3orL1hJL3I3ejI1NGdwVGxocTcyQUQxaTA5K0NOcTRXajB1UjhqMllUUm0za3RJTzJicVIwMFNMVmJ1TGhIOWxaK2JVSUF3QUEifQ== -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTFTelc0VFFReWViQnVxUkdwVnFTOHdEMEIyRlhIaDJQd1FvU2FWQ2dHMXQycVlkWFpIMlhoVzgwTUxCOVJINklFNzRzQ0ZJNitIMU9EWkg0bnVYR3gvdGo5L3R1YjkvT2JWOEdiSUdEdGdoMUdQSGZUSlpmMlBIeGFqMTR3UUNucnNrQTJDdmFlaU0zSUNlQnFxbWdTL1ZtaWRScjZPK1N6M1J1YXFLSklMblNOZkFtUUNtN3FMUzJFa0ZQekthRzlkTW91WE1WOUw3UnkvMUNpTmdzMG1XUmhJd1NpNTVaT1lUd3R0cmQ0UmxZVXk1OWRhcDN4bXZKTjV3L2h1RG9qSzhsWE1sOEtXWUpLNXdCQ3ROR1k2V1R0cWd3cDRLN3lsOUFSZHJ2RkxVTG9RWHFya2pjOEFnVStOOEhnbmlyUWhIa3lReW5ha3N3SEdLK0VOb0lSQU5qVWVhZDk2UmFKYWlhODZXWUp5T1EvcEsyRzJZS2pwSkJ6cC9NOURPQ2s3Ly8xWTIxL2ZhdnZ6WlcxL2ZHZjFlM2J0UG9vZDJPYlNVUU1lQ1UvNlRTdnFSSHpPYmt1UndhM1VwS2pETURENkxtNVpqZ05MRUxMZjcvOTJSOGxDMkhaVUN3NVQ0VVM4TWRSUDBWT241VWlYVG1ta3B1aXMrZ25QbTN1bUE1eDZERXJTa2N3OWJrZmpjWmhRNWV0MzNQajkvL3lvbmhudE85L3RCV0NtRUZyeGhmZ0VSWHNRV3JuYU9DNk5vb00wcXhCcVk2ZWRhT3VHVWhjdFVpM0hudjRCVVRaL2Nna0RBQUE9In0= -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["authors"],"name":[1],"type":["chr"],"align":["left"]},{"label":["avg_page_count"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Winston S. Churchill/John Keegan","2":"4736"},{"1":"Marcel Proust/C.K. Scott Moncrieff/Frederick A. Blossom/Joseph Wood Crutch","2":"3400"},{"1":"Dennis L. Kasper/Dan L. Longo/Stephen L. Hauser/Anthony S. Fauci/Eugene Braunwald","2":"2751"},{"1":"Anonymous","2":"2198"},{"1":"Laurence L. Brunton/John S. Lazo/Keith  L. Parker","2":"2021"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
@@ -1898,7 +1914,7 @@ and the <code>head()</code>:</p>
   filter(authors == &quot;Anonymous&quot;) %&gt;% 
   summarise(authors, book_count = n())</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIxIMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTFRMjJvQ01SQ2RqVWJaUUxYZ2QreStGRXBmQytJSGlBWGZKSzdidXJqT1NDN1V2dlhMdFpOdFZqU0JKSFBPNU16TXlYSytmbEZyQlFBREdJb01CcEpEa0IrclJmRUd6RERJWUFoNXVNLzhhTVpCSUovdkV2azdFdjRjeVZzR1QxMmkydzlxaWZwWTI2Z1VrUnhyNy9aa2JJUnFTM1RZVk9UUkplcmMwSGZaVndndHhDOGZWMTVwbTZyVjFpWURxcDEydXZ3MHJHZDBTU1JqT3JtR2tFVWl1Sk9KT0RNSk1mVVlKdGtWMWQ3am9YZ05EYUpwZVB5QVd5eitXNHByTENWanFWR05YdzNXL2V5dDN0WnRCQk4yM0JrdVQ2YmgvNGhPbUxXbEk2ZjdkNnFpdG1jNmIzRDVBNXFrSE96VUFRQUEifQ== -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyIxIMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTFRMjJvQ01SQ2RqVWJaUUl2UTc5aUY0b3V2Z3ZnQllzRzNFdGUxTHE0emtndld0MzY1ZHJMTkZrMGd5Wnd6T1ROenNscHNwbXFqQUdBQVE1SEJRSElJOG1POUxHYkFESU1NaHBDSCs1c2Z2WEVReU1sRElwOGo0ZlZFM2pKNDZSTGRmbEpMMUtmYVJxV0k1Rmg3ZHlCakkxUmJvdU5uUlI1ZG9zNE5YY3ErUW1naGZ2aTQ4MHJiVksyMk5obFE3YlRUNWQ2d250RXRrWXpwN0JwQ0ZvbmdUaWJpekNURXhHT1laRmRVQjQvSDRuMGFPa1RYOFB3RC83SDQ2eW51c1phTXRVWTFmalZZOThPM2VsdTNFYnl5NWM1eGVUWU5mMGkwd3F3dEhUbmR2MU1WdFQzVG1ZUGJMMm8wVE9YVkFRQUEifQ== -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["authors"],"name":[1],"type":["chr"],"align":["left"]},{"label":["book_count"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Anonymous","2":"1"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
@@ -1910,49 +1926,88 @@ and the <code>head()</code>:</p>
 <p>Q6: The top 5 languages used?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KGxhbmd1YWdlX2NvZGUpICU+JSBcbiAgc3VtbWFyaXNlKGNvdW50ID0gbigpKSAlPiUgXG4gIHNsaWNlX21heChjb3VudCwgbiA9IDUsIHdpdGhfdGllcyA9IEZBTFNFKVxuYGBgIn0= -->
-<pre class="r"><code>books_data %&gt;% 
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KGxhbmd1YWdlX2NvZGUpICU+JSBcbiAgc3VtbWFyaXNlKGNvdW50ID0gbigpKSAlPiUgXG4gIHNsaWNlX21heChjb3VudCwgbiA9IDUsIHdpdGhfdGllcyA9IEZBTFNFKVxuYGBgXG5gYGAifQ== -->
+<pre class="r"><code>```r
+books_data %&gt;% 
   group_by(language_code) %&gt;% 
   summarise(count = n()) %&gt;% 
   slice_max(count, n = 5, with_ties = FALSE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTFRUVU3RE1CRGNPRFdva1FKSS9RSDM1RUF2bkZGVjdrQ2wzcEJ4M0JEaDJwSGpDSTQ4Z1lkeDVzQlhrQnJXaVkyS0kxazdPOTd4WlBadXRWMW0yd3dBVXBpUkJGS0tFT2ptWVYxY0F6TFlKRENEdWF0dk9MUkE0TWdMTitVdlVxRnFENmxReGVZKzhGM0xqdmpibThEdmpNQ1NqMC9BNVNlV2Q4VGZlTDd3ZkVTK1ZMRzk2THduOFdRdW1hcDdWb3RIcmlzUkpybnVsWTNrYzZOZnkvQ0U4eVRPYkJpR245aUhTOVlGbjBCbUZiT3MzQm5VWTNlSUpLZTZ0WTFXS0NLTEtjMC9jV0lpNHJ4WDdrK3Fnai8zNnFXNGNnYmo5ZlRsSHRNalRDWkxNa1JMUDhHbE4rb3Z1V1JQUXZybURCT1BnY3ZXTkxnUG53VFpyclRhc2pDWGNTMERNMmFEd3k4cFZzSkJEd0lBQUE9PSJ9 -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["language_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"eng","2":"8908"},{"1":"en-US","2":"1408"},{"1":"spa","2":"218"},{"1":"en-GB","2":"214"},{"1":"fre","2":"144"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Q7: The most reviewed books?</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KHRpdGxlKSAlPiUgXG4gIHN1bW1hcmlzZShyZXZpZXdzID0gc3VtKHRleHRfcmV2aWV3c19jb3VudCkpICU+JSBcbiAgc2xpY2VfbWF4KHJldmlld3MsIG4gPSA1LCB3aXRoX3RpZXMgPSBGQUxTRSlcbmBgYCJ9 -->
-<pre class="r"><code>books_data %&gt;% 
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6IjUgw5cgMiJ9fSwicmRmIjoiSDRzSUFBQUFBQUFBQTExUVFVN0RNQkRjT0RXb2tRSkkvUUgzNUVBdm5GRlY3a0NsM3BCeDNCRGgycEhqQ0k0OGdZZHg1c0JYa0JyV2lZMktJMWs3Tzk3eFpQWnV0VjFtMnd3QVVwaVJCRktLRU9qbVlWMWNBekxZSkRDRHVhdHZPTFJBNE1nTE4rVXZVcUZxRDZsUXhlWSs4RjNManZqYm04RHZqTUNTajAvQTVTZVdkOFRmZUw3d2ZFUytWTEc5Nkx3bjhXUXVtYXA3Vm90SHJpc1JKcm51bFkza2M2TmZ5L0NFOHlUT2JCaUduOWlIUzlZRm4wQm1GYk9zM0JuVVkzZUlKS2U2dFkxV0tDS0xLYzAvY1dJaTRyeFg3aytxZ2ovMzZxVzRjZ2JqOWZUbEh0TWpUQ1pMTWtSTFA4R2xOK292dVdSUFF2cm1EQk9QZ2N2V05MZ1Bud1RacnJUYXNqQ1hjUzBETTJhRHd5OHBWc0pCRHdJQUFBPT0ifQ== --&gt;
+
+&lt;div data-pagedtable=&quot;false&quot;&gt;
+  &lt;script data-pagedtable-source type=&quot;application/json&quot;&gt;
+{&quot;columns&quot;:[{&quot;label&quot;:[&quot;language_code&quot;],&quot;name&quot;:[1],&quot;type&quot;:[&quot;chr&quot;],&quot;align&quot;:[&quot;left&quot;]},{&quot;label&quot;:[&quot;count&quot;],&quot;name&quot;:[2],&quot;type&quot;:[&quot;int&quot;],&quot;align&quot;:[&quot;right&quot;]}],&quot;data&quot;:[{&quot;1&quot;:&quot;eng&quot;,&quot;2&quot;:&quot;8908&quot;},{&quot;1&quot;:&quot;en-US&quot;,&quot;2&quot;:&quot;1408&quot;},{&quot;1&quot;:&quot;spa&quot;,&quot;2&quot;:&quot;218&quot;},{&quot;1&quot;:&quot;en-GB&quot;,&quot;2&quot;:&quot;214&quot;},{&quot;1&quot;:&quot;fre&quot;,&quot;2&quot;:&quot;144&quot;}],&quot;options&quot;:{&quot;columns&quot;:{&quot;min&quot;:{},&quot;max&quot;:[10],&quot;total&quot;:[2]},&quot;rows&quot;:{&quot;min&quot;:[10],&quot;max&quot;:[10],&quot;total&quot;:[5]},&quot;pages&quot;:{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- rnb-frame-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+Q7: The most reviewed books?
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KHRpdGxlKSAlPiUgXG4gIHN1bW1hcmlzZShyZXZpZXdzID0gc3VtKHRleHRfcmV2aWV3c19jb3VudCkpICU+JSBcbiAgc2xpY2VfbWF4KHJldmlld3MsIG4gPSA1LCB3aXRoX3RpZXMgPSBGQUxTRSlcbmBgYFxuYGBgIn0= --&gt;
+
+```r
+```r
+books_data %&gt;% 
   group_by(title) %&gt;% 
   summarise(reviews = sum(text_reviews_count)) %&gt;% 
   slice_max(reviews, n = 5, with_ties = FALSE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTFSdTA3RE1CUjFrb2Fxa1FLVk1pQzJTQ3d3SkJKQ3FoZ0w0akd4b0NDNm10UnRyTHAyNUxnTkk1L1FmK0JQK0JKV3hJd1lrQnBzMTY1S3N0eHp6NzFINTU3NDRYcDBIb3dDQUlBSE9xNERQRjlDNEQ5bXQ4a0ZrSXhzSE5BQlBWVmY1RklrZ1NMN2Fzc01Eck1hRXp3dFJIeXlSZkh4MmFrWjcyY0ZpcThZbThWWmdkSEVzRWVLdmNOTHhLVnFDM2Rrb1dJdlNWNmdPYTZFSWFNbktPVGFoUEg0aHFDeWdGUlV5a0pkTS96eFZ1cjQ0ZmVncit2WDIrdW0zbi9vK3ZtdWF5dVdUK0VjVlNhU2EwbUJCVUdtNlhLMHhLaXVXc0llWjNWcXhhRVNLN3VtYVg3YkRqbUJsWFd3WkRDR0FxWVRMdld5Vzdja1hWWUt6S2dVdVpIKzAvL0ZEbThSQnd1cUxoa25lYkdnczJTZ0RQUjQ4NFVHK3p2WTNWaTZUZXMxOXhDZFltcXord1ErSTJKZlVpYldnZE9TWTJyZkpKQnNsUW9tb04wTGNrWXNvN09COVIvVVRSWlZhQUlBQUE9PSJ9 -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["title"],"name":[1],"type":["chr"],"align":["left"]},{"label":["reviews"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Twilight (Twilight  #1)","2":"94265"},{"1":"The Book Thief","2":"86881"},{"1":"The Giver (The Giver  #1)","2":"56604"},{"1":"The Alchemist","2":"55919"},{"1":"Water for Elephants","2":"52759"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Q8: The most published authors?</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KGF1dGhvcnMpICU+JSBcbiAgc3VtbWFyaXNlKHB1Ymxpc2hlZF9ib29rcyA9IG4oKSkgJT4lIFxuICBzbGljZV9tYXgocHVibGlzaGVkX2Jvb2tzLCBuID0gNSwgd2l0aF90aWVzID0gRkFMU0UpXG5gYGAifQ== -->
-<pre class="r"><code>books_data %&gt;% 
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6IjUgw5cgMiJ9fSwicmRmIjoiSDRzSUFBQUFBQUFBQTExUnUwN0RNQlIxa29hcWtRS1ZNaUMyU0N3d0pCSkNxaGdMNGpHeG9DQzZtdFJ0ckxwMjVMZ05JNS9RZitCUCtCSld4SXdZa0JwczE2NUtzdHh6ejcxSDU1NzQ0WHAwSG93Q0FJQUhPcTREUEY5QzREOW10OGtGa0l4c0hOQUJQVlZmNUZJa2dTTDdhc3NNRHJNYUV6d3RSSHl5UmZIeDJha1o3MmNGaXE4WW04VlpnZEhFc0VlS3ZjTkx4S1ZxQzNka29XSXZTVjZnT2E2RUlhTW5LT1RhaFBINGhxQ3lnRlJVeWtKZE0venhWdXI0NGZlZ3IrdlgyK3VtM24vbyt2bXVheXVXVCtFY1ZTYVNhMG1CQlVHbTZYSzB4S2l1V3NJZVozVnF4YUVTSzd1bWFYN2JEam1CbFhXd1pEQ0dBcVlUTHZXeVc3Y2tYVllLektnVXVaSCswLy9GRG04UkJ3dXFMaGtuZWJHZ3MyU2dEUFI0ODRVRyt6dlkzVmk2VGVzMTl4Q2RZbXF6K3dRK0kySmZVaWJXZ2RPU1kycmZKSkJzbFFvbW9OMExja1lzbzdPQjlSL1VUUlpWYUFJQUFBPT0ifQ== --&gt;
+
+&lt;div data-pagedtable=&quot;false&quot;&gt;
+  &lt;script data-pagedtable-source type=&quot;application/json&quot;&gt;
+{&quot;columns&quot;:[{&quot;label&quot;:[&quot;title&quot;],&quot;name&quot;:[1],&quot;type&quot;:[&quot;chr&quot;],&quot;align&quot;:[&quot;left&quot;]},{&quot;label&quot;:[&quot;reviews&quot;],&quot;name&quot;:[2],&quot;type&quot;:[&quot;dbl&quot;],&quot;align&quot;:[&quot;right&quot;]}],&quot;data&quot;:[{&quot;1&quot;:&quot;Twilight (Twilight  #1)&quot;,&quot;2&quot;:&quot;94265&quot;},{&quot;1&quot;:&quot;The Book Thief&quot;,&quot;2&quot;:&quot;86881&quot;},{&quot;1&quot;:&quot;The Giver (The Giver  #1)&quot;,&quot;2&quot;:&quot;56604&quot;},{&quot;1&quot;:&quot;The Alchemist&quot;,&quot;2&quot;:&quot;55919&quot;},{&quot;1&quot;:&quot;Water for Elephants&quot;,&quot;2&quot;:&quot;52759&quot;}],&quot;options&quot;:{&quot;columns&quot;:{&quot;min&quot;:{},&quot;max&quot;:[10],&quot;total&quot;:[2]},&quot;rows&quot;:{&quot;min&quot;:[10],&quot;max&quot;:[10],&quot;total&quot;:[5]},&quot;pages&quot;:{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- rnb-frame-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+
+Q8: The most published authors?
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuYm9va3NfZGF0YSAlPiUgXG4gIGdyb3VwX2J5KGF1dGhvcnMpICU+JSBcbiAgc3VtbWFyaXNlKHB1Ymxpc2hlZF9ib29rcyA9IG4oKSkgJT4lIFxuICBzbGljZV9tYXgocHVibGlzaGVkX2Jvb2tzLCBuID0gNSwgd2l0aF90aWVzID0gRkFMU0UpXG5gYGBcbmBgYCJ9 --&gt;
+
+```r
+```r
+books_data %&gt;% 
   group_by(authors) %&gt;% 
   summarise(published_books = n()) %&gt;% 
   slice_max(published_books, n = 5, with_ties = FALSE)</code></pre>
+<p>```</p>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6WyI1IMOXIDIiXX19LCJyZGYiOiJINHNJQUFBQUFBQUFBMTJSVVV2RE1CREhzMjUxckRnMzJCZW8rS0F2SzRndnZzcEVIM3hRdG9sN2sxc2JsOUF1VjVJVWZmUjdDNnZYTG9IUndqV1hYKzd1ZjhjdEh6ZDMwU1ppalBYWklPaXhma2d1QzkvWFQvTjdSb1F1UFRaZ28rYjhvYUFaT1EyY05sSHU0ZUl0ZVU3aUQ4eTR3TXB3Ujg5WGxwZUNxL2hGcXAxajAyVzFsem5HYThoQmdCSFM4MWR0VU1XckZLMk5GNkF6eHljUE83QUM0b1hRMGxqSkNZMWJZY1p1bkYyVFhaRmRkcm9ORmV5NWNaMEdEZzZoc2dLMThlWExhbHRJSTNqMnVVWE1UYWZFU09OMzRzczB1c0V2L2VxNi91dHFwUVVZcitWaGxJR0Y1RXRUUHQwT25aUWhsbGFpb3FSZzVpWTZUZTdwRHBoVXF1a2ttNmVpVXZuOHRoRm9uNC9mMlBuaGlSOGNKWU82czY0enJuWlMrVFdGQld4NTRUZEpFN2NESjZXV3l2cEppSnJFb2dVZkY2VlllTkxPeGc3L2lUakdDRWtDQUFBPSJ9 -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Miwic3VtbWFyeSI6eyJBIHRpYmJsZSI6IjUgw5cgMiJ9fSwicmRmIjoiSDRzSUFBQUFBQUFBQTEyUlVVdkRNQkRIczI1MXJEZzMyQmVvK0tBdks0Z3Z2c3BFSDN4UXRvbDdrMXNibDlBdVY1SVVmZlI3QzZ2WExvSFJ3aldYWCs3dWY4Y3RIemQzMFNaaWpQWFpJT2l4ZmtndUM5L1hUL043Um9RdVBUWmdvK2I4b2FBWk9RMmNObEh1NGVJdGVVN2lEOHk0d01wd1I4OVhscGVDcS9oRnFwMWowMlcxbHpuR2E4aEJnQkhTODFkdFVNV3JGSzJORjZBenh5Y1BPN0FDNG9YUTBsakpDWTFiWWNadW5GMlRYWkZkZHJvTkZleTVjWjBHRGc2aHNnSzE4ZVhMYWx0SUkzajJ1VVhNVGFmRVNPTjM0c3MwdXNFdi9lcTYvdXRxcFFVWXIrVmhsSUdGNUV0VFB0ME9uWlFobGxhaW9xUmc1aVk2VGU3cERwaFVxdWtrbTZlaVV2bjh0aEZvbjQvZjJQbmhpUjhjSllPNnM2NHpyblpTK1RXRkJXeDU0VGRKRTdjREo2V1d5dnBKaUpyRW9nVWZGNlZZZU5MT3hnNy9pVGpHQ0VrQ0FBQT0ifQ== -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["authors"],"name":[1],"type":["chr"],"align":["left"]},{"label":["published_books"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"P.G. Wodehouse","2":"40"},{"1":"Stephen King","2":"40"},{"1":"Rumiko Takahashi","2":"39"},{"1":"Orson Scott Card","2":"35"},{"1":"Agatha Christie","2":"33"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
