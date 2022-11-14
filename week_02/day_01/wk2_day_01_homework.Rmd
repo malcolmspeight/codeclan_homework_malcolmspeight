@@ -1,0 +1,112 @@
+---
+title: "wk2_day_01_homework"
+output: html_notebook
+---
+
+# Q1 - Read in the data
+
+Read in the original data
+```{r}
+card_base <- read_csv('data/CardBase.csv')
+customer_base <- read_csv('data/CustomerBase.csv')
+fraud_base <- read_csv('data/FraudBase.csv')
+transaction_base <- read_csv('data/TransactionBase.csv')
+```
+
+load janitor
+```{r}
+library(janitor)
+```
+
+Clean the column names. 
+```{r}
+card_base <- clean_names(card_base)
+customer_base <- clean_names(customer_base)
+fraud_base <- clean_names(fraud_base)
+transaction_base <- clean_names(transaction_base)
+```
+
+
+# Q2
+
+```{r}
+nrow(card_base)
+```
+
+Given that there are 500 entries in the card_base table, there will be 500 rows when left_joined to the customer_base table. 
+
+```{r}
+left_join(card_base, customer_base, by = "cust_id")
+```
+
+# Q3
+
+Entries in fraud and transaction tables
+```{r}
+nrow(fraud_base)
+nrow(transaction_base)
+```
+
+Full join between fraud_base and transaction_base tables
+```{r}
+full_join(fraud_base, transaction_base, by = "transaction_id")
+```
+
+The resulting table from the full join has the same number of entries as the transaction table, which means that the fraudulent transactions were already recorded within the transaction table. 
+
+
+# Q4
+
+Semi-join is required here. 
+
+```{r}
+semi_join(card_base, transaction_base, by = c('card_number' = 'credit_card_id'))
+```
+
+500 rows were returned. 
+
+Number of rows in card_base table is also 500. 
+
+```{r}
+nrow(card_base)
+```
+
+
+# Q5
+
+Read in hat_observations
+```{r}
+hat_obs <- read_csv("data/hat_observations.csv")
+```
+
+Separate observation column. 
+```{r}
+hat_obs <- hat_obs %>% 
+  separate(observation, c("hat_color", "hat_type"), sep = "\\,")
+
+hat_obs
+```
+
+# Q6
+
+Join day, month and year in to one column. 
+```{r}
+hat_obs <- hat_obs %>% 
+  unite(date, c("day", "month", "year"), sep = "-")
+
+hat_obs
+```
+
+
+The date when the most berets were observed. 
+
+```{r}
+hat_obs %>%
+  group_by(date, hat_type) %>% 
+  summarise(hat_count = sum(observation_count)) %>% 
+  filter(hat_type == "beret") %>% 
+  arrange(desc(hat_count)) %>% 
+  head(1)
+```
+
+
