@@ -1,0 +1,88 @@
+---
+title: "wk_02_day_02_homework"
+output: html_notebook
+---
+
+# Question 1
+
+```{r}
+tweets <- read_csv("data/code_clan_tweets.csv")
+```
+
+```{r}
+tweets %>% 
+  nrow() 
+```
+
+```{r}
+tweets %>% 
+  ncol()
+```
+
+```{r}
+tweets %>% 
+  names()
+```
+
+
+# Question 2
+
+```{r}
+tweets %>% 
+  filter(is_quote != TRUE) %>% 
+  summarise(nfavs = sum(favorite_count))
+```
+
+# Question 3
+
+```{r}
+tweets %>% 
+  filter(is_quote != TRUE) %>% 
+  group_by(source) %>% 
+  summarise(mean_tweets = mean(retweet_count, na.rm = TRUE))
+```
+
+# Question 4
+
+Contents of media_type variable:
+
+```{r}
+tweets %>% 
+  distinct(media_type)
+```
+
+Replace NAs in media_type with type "text" and count total likes by media type:
+
+```{r}
+tweets %>% 
+  mutate(media_type = coalesce(media_type, "text")) %>% 
+  group_by(media_type) %>% 
+  summarise(nlikes = sum(favorite_count)) %>% 
+  arrange(desc(nlikes))
+```
+
+# Question 5
+
+```{r}
+tweets %>% 
+  summarise(avg_tweet_chars = mean(display_text_width, na.rm = TRUE))
+```
+
+# Question 6
+
+```{r}
+info <- read_csv("data/code_clan_info.csv")
+
+tweet_info <- left_join(tweets, info, "tweet_id")
+```
+
+
+# Question 7
+
+```{r}
+codeclan_hashtags <- tweet_info %>% 
+  select(tweet_id, hashtags) %>% 
+  mutate(hashtags = str_to_lower(hashtags)) %>% 
+  filter(!is.na(hashtags))
+```
+
