@@ -1,0 +1,117 @@
+---
+title: "wk_02_day_03_homework"
+output: html_notebook
+---
+
+# Question 1
+
+```{r}
+forecast <- list(
+  "Monday" = list(temp = 9, rain = 0.4, wind = 15), 
+  "Tuesday" = list(temp = 8, rain = 0.9, wind = 25), 
+  "Wednesday" = list(temp = 7, rain = 0.2, wind = 10)
+)
+
+forecast
+```
+
+
+# Question 2
+
+```{r}
+# (i)
+forecast$Monday$rain
+
+# (ii)
+forecast$Wednesday$wind 
+
+# (iii)
+forecast$Tuesday$temp
+```
+
+
+# Question 3
+
+```{r}
+week1 <- c(9, 9, 10, 9, 7, 6, 7)
+week2 <- c(7, 8, 8, 9, 9, 8, 8)
+days <- c("M", "T", "W", "T", "F", "S", "S")
+
+weather_matrix <- rbind(week1, week2)
+colnames(weather_matrix) <- days
+
+weather_matrix
+```
+
+
+# Question 4
+
+```{r}
+# (i)
+weather_matrix[2, 3]
+
+# (ii)
+weather_matrix[2,]
+
+# (iii)
+weather_matrix[c(1, 2), c(1, 3, 5)]
+```
+
+
+# Question 5
+
+```{r}
+pre_append <- function(x){
+  if (is.numeric(x)) {
+    if (x < 10) {
+      print(paste0("Your number is less than 10. Here it is: ", x))
+    } else {
+      print(paste0("Your number is greater than 10. Divided by 10 it becomes: ", x / 10))
+    } 
+  } if (is.character(x)){
+        print(paste0("The answer is: ", x))
+    } else{
+      print(paste("Invalid input."))
+      }
+}
+```
+
+
+# Question 6
+
+```{r}
+match_vectors <- function(v1, v2){
+  if (all(v1 == v2)) {
+    print("Exactly the same")
+  } else{
+    s_v1 <- sort(v1)
+    s_v2 <- sort(v2)
+    if (all(s_v1 == s_v2)) {
+      print("The same")
+    } else {
+      print("Different")
+      }
+    }
+  }
+```
+
+```{r}
+Vector1 <- c("a", "b", "c", "d")
+Vector2 <- c("a", "b", "c", "d")
+
+match_vectors(Vector1, Vector2)
+```
+
+```{r}
+Vector1 <- c("b", "a", "c", "d")
+Vector2 <- c("a", "b", "c", "d")
+
+match_vectors(Vector1, Vector2)
+```
+
+```{r}
+Vector1 <- c(1, "a", "c", "d")
+Vector2 <- c("a", "b", "c", "d")
+
+match_vectors(Vector1, Vector2)
+```
