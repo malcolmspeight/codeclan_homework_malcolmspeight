@@ -108,7 +108,7 @@ AND fte_hours = 1.0;
 -- Question 15
 
 SELECT first_name , last_name , fte_hours , salary, 
-        fte_hours * salary AS effective_yearly_salary
+        (fte_hours * salary) AS effective_yearly_salary
 FROM employees; 
 
 
@@ -146,10 +146,13 @@ AND start_date NOTNULL;
 
 
 -- Question 18
--- can't get to work
+
 SELECT first_name, last_name, salary, 
-    CASE WHEN (salary < 40000 THEN 'low' ELSE 'high') END AS salary_class
-FROM employees; 
+    (CASE WHEN salary < 40000 THEN 'low' 
+          WHEN salary >= 40000 THEN 'high' END) AS salary_class
+FROM employees
+WHERE salary NOTNULL 
+ORDER BY salary ASC; 
 
 
 
