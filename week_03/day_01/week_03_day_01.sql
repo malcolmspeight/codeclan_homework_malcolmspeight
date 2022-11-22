@@ -93,7 +93,7 @@ WHERE email ILIKE '%@yahoo%';
 
 SELECT count(*) AS Not_pension_enrol
 FROM employees
-WHERE pension_enrol = TRUE
+WHERE pension_enrol IS TRUE
 AND country NOT IN ('France', 'Germany');
 
 
@@ -107,8 +107,12 @@ AND fte_hours = 1.0;
 
 -- Question 15
 
-SELECT first_name , last_name , fte_hours , salary, 
-        (fte_hours * salary) AS effective_yearly_salary
+SELECT 
+    first_name, 
+    last_name, 
+    fte_hours, 
+    salary, 
+    (fte_hours * salary) AS effective_yearly_salary
 FROM employees; 
 
 
@@ -126,8 +130,8 @@ AND department NOTNULL;
 
 -- Question 17
 
-SELECT first_name || ' ' || last_name || ' - ' || department || 
-        ' (joined ' || EXTRACT(YEAR FROM start_date) || ')' AS badge_label
+SELECT concat(first_name, ' ', last_name, ' - ', department, 
+        ' (joined ', EXTRACT(YEAR FROM start_date), ')') AS badge_label
 FROM employees
 WHERE first_name NOTNULL 
 AND last_name NOTNULL
@@ -136,8 +140,8 @@ AND start_date NOTNULL;
 
 
 -- with month as string (not quite right though)
-SELECT first_name || ' ' || last_name || ' - ' || department || 
-        ' (joined ' || TO_CHAR(start_date, 'Month') || to_char(start_date, 'YYYY') || ')' AS badge_label
+SELECT concat(first_name, ' ', last_name, ' - ', department, 
+        ' (joined ', TO_CHAR(start_date, 'FMMonth YYYY'), ')') AS badge_label
 FROM employees
 WHERE first_name NOTNULL 
 AND last_name NOTNULL
