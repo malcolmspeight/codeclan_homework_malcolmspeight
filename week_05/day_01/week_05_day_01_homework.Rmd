@@ -1,0 +1,98 @@
+---
+title: "week_05_day_01_homework"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(CodeClanData)
+```
+
+```{r}
+col_scheme <- c("#E89FE9", "#50434F", "#B6A7B5", "#F9A472", "#BD7040")
+```
+
+
+
+## MVP
+
+#### Question 1. 
+
+```{r}
+ggplot(qb_revenue_breakdown) +
+  aes(x = Year, y = Revenue, fill = Product) +
+  geom_col() +
+  scale_y_continuous(labels = scales::comma)
+```
+
+#### Question 2.
+
+```{r}
+flagship_sales <- qb_monthly_sales %>% 
+  filter(Cashflow == "Kwikbit Unit 1 Sales")
+
+ggplot(flagship_sales) + 
+  aes(x = Date, y = Amount) +
+  geom_line() +
+  xlab("\nTime") + 
+  ylab("Sales") +
+  ggtitle("KwikBit Unit 1 Sales")
+```
+
+#### Question 3.
+
+```{r}
+qb_monthly_sales_adj <- qb_monthly_sales %>% 
+  filter(Cashflow != "Kwikbit Unit 1 Sales")
+
+ggplot(qb_monthly_sales_adj) +
+  aes(x = Date, y = Amount, group = Cashflow, colour = Cashflow) +
+  geom_line() +
+  xlab("\nTime") + 
+  ylab("Amount") +
+  scale_y_continuous(labels = scales::comma)
+```
+
+#### Question 4.
+
+```{r}
+qb_competitors %>% 
+  mutate(Revenue_million = Revenue / 1000000) %>% 
+  ggplot() +
+  aes(x = Year) +
+  geom_area(aes(y = Revenue_million, fill = Company)) +
+  xlab("\nTime") + 
+  ylab("Revenue (miilion)") 
+```
+
+#### Question 5.
+
+```{r}
+ggplot(qb_competitors) +
+  aes(x = Year, y = Revenue, group = Company, colour = Company) +
+  geom_line() +
+  geom_point() +
+  xlab("\nTime") + 
+  ylab("Revenue") +
+  scale_y_continuous(labels = scales::comma)
+```
+
+#### Question 6.
+
+```{r}
+qb_device_data_adj <- qb_device_data %>% 
+  mutate(time = (hours * 60) + mins, .after = mins)
+view(qb_device_data_adj)
+
+ggplot(qb_device_data_adj) +
+  aes(x = time, y = counts, group = device, colour = id) +
+  geom_line() +
+  facet_wrap(~ device) +
+  xlab("\nTime (mins)") +
+  ylab("Counts")
+```
+
+
+
+
+
