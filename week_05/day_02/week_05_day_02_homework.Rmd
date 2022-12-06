@@ -170,7 +170,7 @@ backpack %>%
   labs(
     x = "\nbody weight",
     y = "backpack weight\n", 
-    title = "Back Problems by Backpack Weight and Gender\n"
+    title = "Back Problems by Backpack Weight, Body Weight and Gender\n"
     )
 ```
 
