@@ -1,0 +1,176 @@
+---
+title: "Week_05_day_02 homework"
+author: "Malcolm Speight"
+date: "2022-12-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+<br/> 
+
+##### **Question 1**
+
+```{r, include = FALSE}
+library(tidyverse)
+library(CodeClanData)
+```
+
+
+##### **Question 2**
+
+The distribution shows that the most common backpack weight is 10 with only 1 backpack weighing more than 30. 
+
+```{r}
+ggplot(backpack) +
+  aes(x = backpack_weight) +
+  geom_bar() +
+  scale_x_continuous(breaks = 1:40) +
+  scale_y_continuous(breaks = 1:15) +
+  labs(
+    x = "\nweight", 
+    y = "count", 
+    title = "Backpack weights\n"
+  )
+```
+
+<br/> 
+
+##### **Question 3**
+
+The most common backpack weight for women is 10 whilst for men it is 11. 
+
+The heaviest backpack carried by a woman is 25 whilst one man carried a backpack of weight 35. 
+
+```{r}
+ggplot(backpack) +
+  aes(x = backpack_weight, fill = sex) +
+  geom_bar(position = "dodge") +
+  scale_x_continuous(breaks = 1:40) +
+  scale_y_continuous(breaks = 1:15) +
+  labs(
+    x = "\nweight", 
+    y = "count", 
+    title = "Backpack Weights by Gender\n", 
+    fill = ""
+  )
+```
+
+
+<br/> 
+
+##### **Question 4**
+
+There doesn't seem to be much of a relationship between body weight and backpack weight.
+
+```{r}
+ggplot(backpack) +
+  aes(x = backpack_weight, y = body_weight) +
+  geom_point() +
+  labs(
+    x = "\nbackpack weight", 
+    y = "body weight\n", 
+    title = "Backpack Weights by Body Weight\n"
+    )
+```
+
+<br/> 
+
+##### **Question 5**
+
+It would appear that women are carrying heavier backpacks in relation to their body weight than men are. 
+
+```{r}
+ggplot(backpack) +
+  aes(x = backpack_weight, y = body_weight, colour = sex) +
+  geom_point() +
+  labs(
+    x = "\nbackpack weight", 
+    y = "body weight\n", 
+    title = "Backpack Weights by Body Weight and Gender\n"
+    )
+```
+
+
+<br/> 
+
+##### **Question 6**
+
+About a third of students report back pain. 
+
+```{r}
+backpack %>% 
+  mutate(back_problems_adj = ifelse(back_problems, TRUE, FALSE)) %>% 
+  mutate(back_problems_adj = factor(back_problems_adj, levels = c("TRUE", "FALSE"))) %>% 
+  ggplot() +
+  aes(x = back_problems_adj) +
+  geom_bar() +
+  
+  
+  labs(
+    x = "\nback pain", 
+    y = "count\n",
+    title = "Back problems in students\n"
+  )
+```
+
+<br/> 
+
+
+##### **Question 7**
+
+About 20% of male students report back pain. That ratio is closer to 50% for female students. 
+
+```{r}
+backpack %>% 
+  mutate(back_problems_adj = ifelse(back_problems, TRUE, FALSE)) %>% 
+  mutate(back_problems_adj = factor(back_problems_adj, levels = c("TRUE", "FALSE"))) %>% 
+  ggplot() +
+  aes(x = back_problems_adj, fill = sex) +
+  geom_bar(position = "dodge") +
+  scale_y_continuous(breaks = c(10, 20, 30, 40)) +
+  labs(
+    x = "\nback pain", 
+    y = "count\n",
+    title = "Back problems in students\n", 
+    fill = ""
+  )
+```
+
+
+<br/> 
+
+##### **Question 8**
+
+Those students suffering back pain (both male and female) tend to have heavier backpacks compared to 
+students not suffering back pain. 
+
+```{r}
+backpack %>% 
+  mutate(back_problems_adj = ifelse(back_problems, TRUE, FALSE)) %>% 
+  mutate(back_problems_adj = factor(back_problems_adj, levels = c("TRUE", "FALSE"))) %>% 
+  ggplot() +
+  aes(x = body_weight, y = backpack_weight, colour = sex) +
+  geom_point() +
+  facet_grid(back_problems_adj ~ sex) +
+  labs(
+    x = "\nbody weight",
+    y = "backpack weight\n", 
+    title = "Back Problems by Backpack Weight and Gender\n"
+    )
+```
+
