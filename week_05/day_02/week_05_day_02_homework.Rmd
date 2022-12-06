@@ -9,27 +9,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-
 <br/> 
 
 ##### **Question 1**
 
-```{r, include = FALSE}
+Load libraries and examine data.
+
+```{r, include=FALSE}
 library(tidyverse)
 library(CodeClanData)
 ```
 
+<br/> 
 
 ##### **Question 2**
 
@@ -114,8 +105,8 @@ About a third of students report back pain.
 
 ```{r}
 backpack %>% 
-  mutate(back_problems_adj = ifelse(back_problems, TRUE, FALSE)) %>% 
-  mutate(back_problems_adj = factor(back_problems_adj, levels = c("TRUE", "FALSE"))) %>% 
+  mutate(back_problems_adj = ifelse(back_problems, "PAIN", "NO PAIN")) %>% 
+  mutate(back_problems_adj = factor(back_problems_adj, levels = c("PAIN", "NO PAIN"))) %>% 
   ggplot() +
   aes(x = back_problems_adj) +
   geom_bar() +
@@ -137,8 +128,8 @@ About 20% of male students report back pain. That ratio is closer to 50% for fem
 
 ```{r}
 backpack %>% 
-  mutate(back_problems_adj = ifelse(back_problems, TRUE, FALSE)) %>% 
-  mutate(back_problems_adj = factor(back_problems_adj, levels = c("TRUE", "FALSE"))) %>% 
+  mutate(back_problems_adj = ifelse(back_problems, "PAIN", "NO PAIN")) %>% 
+  mutate(back_problems_adj = factor(back_problems_adj, levels = c("PAIN", "NO PAIN"))) %>% 
   ggplot() +
   aes(x = back_problems_adj, fill = sex) +
   geom_bar(position = "dodge") +
@@ -161,8 +152,8 @@ students not suffering back pain.
 
 ```{r}
 backpack %>% 
-  mutate(back_problems_adj = ifelse(back_problems, TRUE, FALSE)) %>% 
-  mutate(back_problems_adj = factor(back_problems_adj, levels = c("TRUE", "FALSE"))) %>% 
+  mutate(back_problems_adj = ifelse(back_problems, "PAIN", "NO PAIN")) %>% 
+  mutate(back_problems_adj = factor(back_problems_adj, levels = c("PAIN", "NO PAIN"))) %>% 
   ggplot() +
   aes(x = body_weight, y = backpack_weight, colour = sex) +
   geom_point() +
