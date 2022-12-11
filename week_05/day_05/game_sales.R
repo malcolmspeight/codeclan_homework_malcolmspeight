@@ -2,11 +2,11 @@ library(shiny)
 library(tidyverse)
 library(bslib)
 
-# This app should allow the user to see the top 10 list of their choosing, be it 'Game name', 'Genre' or 'Developer' by value of sales. 
+# This app should allow the user to see the top 10 list of their choosing, be it 'Game name', 'Genre' or 'Developer' by value of sales. These are variables within the game_sales data set. 
 # 
-# However I can't get code to populate the visualisation. The ggplot code for all three possibilities is saved at the bottom of this screen to testing. 
+# However I can't get code to populate the visualisation. The ggplot code for all three possibilities is saved at the bottom of this screen for testing. 
 
-# Previously all our examples have shown the user selecting a value from within a selected variable. 
+# Previously all our examples have shown the user selecting a value from within a selected variable rather than selecting a variable/column name.
 # 
 # There are plans in the code to add a second radio button to allow the user to determine the measure used. At present it is set as 'sales' but the user should hopefully be able to select 'critic score' or 'user score' also.
 # 
