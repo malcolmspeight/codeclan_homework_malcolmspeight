@@ -1,0 +1,129 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+#### 1 MVP
+
+#### Question 1.1
+
+```{r}
+# read in data
+library(tidyverse)
+titantic_data <- read_csv("data/titanic.csv")
+```
+
+```{r}
+# list class values of crew members
+crew_roles <- c("engineering crew", 
+               "victualling crew", 
+               "restaurant staff", 
+               "deck crew")
+
+# identify crew members in data set 
+titantic_data <- titantic_data %>% 
+  mutate(crew_member = case_when(
+    class %in% crew_roles ~ TRUE, 
+    TRUE ~ FALSE
+  ))
+
+# table of crew from titanic
+crew <- titantic_data %>% 
+  filter(crew_member == TRUE)
+
+# table of passengers from titanic
+passengers <- titantic_data %>% 
+  filter(crew_member == FALSE)
+```
+
+```{r}
+# prob(survived | crew)
+titantic_data %>% 
+  filter(survived == "yes") %>% 
+  filter(crew_member == TRUE) %>% 
+  summarise(prob_survived_crew = n() / nrow(crew))
+```
+```{r}
+# prob(survived | passenger)
+titantic_data %>% 
+  filter(survived == "yes") %>% 
+  filter(crew_member == FALSE) %>% 
+  summarise(prob_survived_passenger = n() / nrow(passengers))
+```
+
+#### 1.2 MVP
+
+
+```{r}
+library(gtools)
+source("data/prob.R")
+```
+
+
+#### Question 1. 
+
+```{r}
+roll_1 <- rolldie(1)
+
+roll_1 %>% 
+  filter(X1 < 5) %>% 
+  summarise(prob_less_than_five = n() / nrow(roll_1))
+```
+
+#### Question 2. 
+
+```{r}
+# number of outcomes where we toss 3 dice
+nrow(rolldie(3))
+```
+
+
+#### Question 3.1
+
+```{r}
+roll_4 <- rolldie(4) 
+
+roll_4 %>%
+  mutate(total = rowSums(.)) %>% 
+  filter(total == 5 | total == 6 | total == 7) %>% 
+  summarise(outcomes_5_or_6_or_7 = n())
+```
+#### Question 3.2
+
+```{r}
+roll_4 %>%
+  mutate(total = rowSums(.)) %>% 
+  filter(total == 5 | total == 6 | total == 7) %>% 
+  summarise(prob_5_or_6_or_7 = n() / nrow(roll_4))
+```
+
+#### Question 3.3
+
+Assumption: the sequence of the face values on each dice does not matter. 
+
+
+#### Question 4
+
+```{r}
+# list of heights, with H1 being the tallest person
+heights <- c("H1", "H2", "H3", "H4", "H5")
+
+# table of all permutations of sitting arrangements
+chairs <- as_tibble(permutations(n = 5, r = 5, v = heights, 
+                                  repeats.allowed = FALSE)) %>% 
+  rename("chair_1" = "V1", 
+         "chair_2" = "V2",
+         "chair_3" = "V3",
+         "chair_4" = "V4",
+         "chair_5" = "V5")
+
+# order of decreasing height
+chairs %>%
+  filter(chair_1 == "H1") %>% 
+  filter(chair_2 == "H2") %>% 
+  filter(chair_3 == "H3") %>% 
+  filter(chair_4 == "H4") %>% 
+  filter(chair_5 == "H5") %>% 
+  summarise(correct_order = n())
+```
+

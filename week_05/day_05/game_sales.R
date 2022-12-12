@@ -49,7 +49,7 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  
+
   output$game_data_plot <- renderPlot({
     
     game_sales_data %>%
@@ -90,7 +90,7 @@ shinyApp(ui, server)
 # game_sales_data %>%
 #   group_by(name) %>%
 #   summarise(total_sales = sum(sales)) %>%
-#   slice_max(total_sales, n = 10) %>% 
+#   slice_max(total_sales, n = 10) %>%
 #   ggplot() +
 #   aes(x = total_sales, y = reorder(name, total_sales), fill = name) +
 #   geom_col(show.legend = FALSE) +
