@@ -1,0 +1,84 @@
+---
+title: "week_10_day_01 homework"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(modelr)
+```
+
+```{r}
+# load in the data
+project <- read_csv("data/project_management.csv")
+```
+
+```{r}
+# plot project data
+project %>% 
+  ggplot() +
+  aes(x = estimated_length, y = actual_length) +
+  geom_point()
+```
+
+```{r}
+# calculate correlation coefficient
+project %>% 
+  summarise(cor(estimated_length, actual_length))
+```
+There is a very strong positive correlation between the two variables. 
+
+
+```{r}
+# simple linear regression of project variables
+project_model <- lm(formula = actual_length ~ estimated_length, data = project)
+
+project_model
+```
+The regression coefficient is 1.223, meaning that for every 1 unit increase in estimated length, the actual length increases by 1.223
+
+
+```{r}
+# correlation coefficients
+glance_output <- clean_names(glance(project_model))
+
+glance_output
+```
+A r^2 value of 0.6474 means that 64.74% of the variation in `actual length` can be explained by variation in `estimated length`.
+
+
+```{r}
+library(ggfortify)
+```
+
+```{r}
+# diagnostic plots
+autoplot(project_model)
+```
+
+The p_value is less than a 0.01 significance level so would imply that the coefficient of determination (i.e. r^2) is significantly different from zero. 
+
+This conclusion is subject to interpretation of the above diagnostic plots.
+
+- Residuals vs Fitted: 
+This plot tests the independence of the residuals. 
+Ideally the residuals would be randomly scattered around zero. This is the case in the above plot.
+
+- Normal Q-Q:
+This plot tests the normality of the residuals.
+All points should lie close to the line. In the above plot they do, indicating the residuals to be normally distributed. 
+
+- Scale-Location:
+This plot tests the constancy of variation of the residuals. 
+Ideally the residuals should all lie in a band of ficed width above the x-axis.
+The blue line in the graph above stays close to a constant value so is fine. 
+
+**Conclusion:**
+Given that the diagnostic plots indicate that the residuals are:
+- independent of each other
+- normally distributed, and 
+- are fairly constant in variation across the range of data
+we can conclude that the low p-value indicates that the relationship between estimated length and actual length is statistically significant.  
+
+
+
