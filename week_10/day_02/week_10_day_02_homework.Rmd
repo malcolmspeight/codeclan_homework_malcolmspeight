@@ -1,0 +1,190 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(mosaicData)
+library(janitor)
+library(GGally)
+```
+
+### Task 1
+
+```{r}
+housing_prices <- read_csv("data/housing_prices.csv") %>% 
+  clean_names()
+
+summary(housing_prices)
+```
+Looking at the Kaggle website, the `median_income` variable is measured in tens-of-thousands of US Dollars, whilst the `median_house_value` is measured in US Dollars. 
+
+Convert `median_income` to US Dollars. 
+
+```{r}
+housing_prices_scaled <- housing_prices %>% 
+  mutate(median_income = median_income * 10000)
+```
+
+Variable `total_bedrooms` has 200 missing values. Replace with mean of `total_bedrooms`.
+
+```{r}
+housing_prices_scaled <- housing_prices_scaled %>% 
+  mutate(total_bedrooms = coalesce(total_bedrooms, mean(total_bedrooms, na.rm = TRUE)))
+```
+
+Check for aliases. 
+
+```{r}
+alias(lm(total_rooms ~., data = housing_prices_scaled))
+```
+No aliases found. 
+
+
+### Task 2
+
+```{r}
+ggpairs(housing_prices_scaled)
+```
+
+Correlation between `total_rooms` and `total_bedrooms` is 0.931. 
+
+
+### Task 3
+
+```{r}
+# remove total_bedrooms from dataset
+housing_prices_scaled <- housing_prices_scaled %>% 
+  select(-total_bedrooms)
+```
+
+
+### Task 4
+
+```{r}
+ggpairs(housing_prices_scaled)
+```
+
+Looks like there are 3 key variables for `median_house_value`: `latitude`, `total_rooms` and `median_income`
+
+Let's plot each of these against `median_house_value`.
+
+```{r}
+housing_prices_scaled %>% 
+  ggplot() + 
+  aes(x = latitude, y = median_house_value) + 
+  geom_point() +
+  scale_y_continuous(labels = scales::comma)
+```
+
+```{r}
+housing_prices_scaled %>% 
+  ggplot() + 
+  aes(x = total_rooms, y = median_house_value) + 
+  geom_point() + 
+  scale_y_continuous(labels = scales::comma)
+```
+`total_rooms` is the number of rooms in a block. Divide this by number of households to get average rooms per household:
+
+```{r}
+housing_prices_scaled <- housing_prices_scaled %>% 
+  mutate(avg_rooms_per_house = total_rooms / households)
+```
+
+```{r}
+housing_prices_scaled %>% 
+  ggplot() + 
+  aes(x = avg_rooms_per_house, y = median_house_value) + 
+  geom_point() +
+  scale_y_continuous(labels = scales::comma)
+```
+Plenty of outliers in the `avg_rooms_per_house` variable
+
+
+
+```{r}
+housing_prices_scaled %>% 
+  ggplot() + 
+  aes(x = median_income, y = median_house_value) + 
+  geom_point() +
+  scale_y_continuous(labels = scales::comma)
+```
+
+
+### Task 5
+
+```{r}
+housing_prices_scaled %>% 
+  distinct(ocean_proximity)
+```
+There are 5 unique values/levels within `ocean_proximity`, so that means you require n - 1 dummy variables, which is 4. 
+
+
+### Task 6
+
+```{r}
+library(ggfortify)
+
+house_model <- lm(median_house_value ~ median_income, data = housing_prices_scaled)
+
+autoplot(house_model) # diagnostics
+```
+residuals vs fitted: looks ok with residuals randomly scattered around zero
+normal q-q: looks ok-ish but outliers at the low and high end distort the normal distribution
+scale-location: definite funnelling effect
+
+```{r}
+summary(house_model)
+```
+**Conclusion**
+house_model produces a r^2 value of 0.4129 with a statistically significant p-value. 
+
+
+### Task 7
+
+Add `total_rooms` to the model. 
+
+```{r}
+housing_prices_scaled %>% 
+  summarise(cor = cor(median_house_value, total_rooms))
+```
+A very weak positive correlation between the two variables. Great!
+
+Nevertheless, add it to the model:
+
+```{r}
+house_model_2 <- lm(median_house_value ~ median_income + total_rooms,
+                    data = housing_prices_scaled)
+```
+
+```{r}
+# diagnostics
+autoplot(house_model_2)
+```
+ Very similar to the first model. 
+
+residuals vs fitted: looks ok with residuals randomly scattered around zero
+normal q-q: looks ok-ish but outliers at the low and high end distort the normal distribution
+scale-location: definite funnelling effect
+
+```{r}
+summary(house_model_2)
+```
+**Conclusion:**
+house_model_2 does not change let alone improve on the r^2 value of 0.4129 from the first house_model. 
+Indeed, the p-value for `total_rooms` indicates that as a predictor it is not statistically significant. 
+
+
+
+
+
+
+
+
+
+
+
+
+
