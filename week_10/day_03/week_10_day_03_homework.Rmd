@@ -35,7 +35,7 @@ houses_tidy <- houses_tidy %>%
   select(-c(id, date, sqft_living15, sqft_lot15, zipcode, yr_renovated)) 
 ```
 
-Leave `view`, `condition` and `grade` as they are - all categorical variables. 
+Leave `view`, `condition` and `grade` as they are. All are categorical ordinal variables with an implicit order to them - the higher the number the better the category. 
 
 
 # Question 2
