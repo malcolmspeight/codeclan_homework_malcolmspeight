@@ -1,0 +1,197 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(modelr)
+library(GGally)
+library(ggfortify)
+```
+
+```{r}
+houses <- read_csv("data/kc_house_data.csv")
+```
+
+
+# Question 1
+
+```{r}
+head(houses)
+```
+
+```{r}
+# create logical variables for waterfront and renovated
+houses_tidy <- houses %>%   
+mutate(waterfront = as.logical(waterfront)) %>%  
+mutate(renovated = as.logical(if_else(yr_renovated > 0, 1, 0)))
+```
+
+```{r}
+# remove variables
+houses_tidy <- houses_tidy %>% 
+  select(-c(id, date, sqft_living15, sqft_lot15, zipcode, yr_renovated)) 
+```
+
+Leave `view`, `condition` and `grade` as they are - all categorical variables. 
+
+
+# Question 2
+
+```{r}
+# test for alias
+alias(lm(price ~ ., data = houses_tidy))
+```
+```{r}
+# remove alias
+houses_tidy <- houses_tidy %>% 
+  select(-sqft_basement)
+```
+
+```{r}
+# test for alias again
+alias(lm(price ~ ., data = houses_tidy))
+```
+
+# Question 3
+
+```{r}
+houses_tidy_numeric <- houses_tidy %>%
+  select_if(is.numeric)
+
+houses_tidy_nonnumeric <- houses_tidy %>%
+  select_if(function(x) !is.numeric(x))
+
+houses_tidy_nonnumeric$price <- houses_tidy$price
+```
+
+```{r, message=FALSE, warning=FALSE}
+ggpairs(houses_tidy_numeric)
+```
+*Numeric variables:*
+
+High correlation pairs:
+- price & sqft_living (0.702)
+- price & grade (0.667)
+- price & sqft_above (0.606)
+- price & bathrooms (0.525)
+- price & bedrooms (0.308)
+
+
+
+```{r, message=FALSE, warning=FALSE}
+ggpairs(houses_tidy_nonnumeric)
+```
+Variables of interest:
+- `waterfront` looks to have variation in mean between the 2 categories
+
+
+*Predictor 1*
+
+```{r}
+mod1a <- lm(formula = price ~ sqft_living, data = houses_tidy)
+mod1b <- lm(formula = price ~ waterfront, data = houses_tidy)
+```
+
+_mod1a_
+
+```{r}
+autoplot(mod1a)
+```
+```{r}
+summary(mod1a)
+```
+r^2 = 0.4929
+res = 261500
+diagnostic plots look ok altho skewness at high end on Normal Q-Q
+`sqft_living` is a statistically significant predictor
+
+_mod1b_
+
+```{r}
+autoplot(mod1b)
+```
+```{r}
+summary(mod1b)
+```
+r^2 = 0.07095
+rse = 353900
+diagnostic plots look ok but there is skewness at the high end on Normal Q-Q
+`waterfront` is a statistically significant predictor
+
+-------------------------------------------------------------------------------
+
+Given the r^2 number, first predictor is `sqft_living`. 
+
+model: price =  -43580.743 + (280.624 * `sqft_living`)
+
+
+*Predictor 2*
+
+```{r}
+# remove variables included in the model
+houses_remaining_resid_numeric <- houses_tidy_numeric %>% 
+  add_residuals(model = mod1a) %>% 
+  select(-c(price, sqft_living))
+```
+
+```{r, message=FALSE, warning=FALSE}
+ggpairs(houses_remaining_resid_numeric)
+```
+*Numeric variables:*
+
+High correlation pairs:
+- residual & lat (0.379)
+- residual & view (0.277)
+
+
+Hmmm, let's add `lat` from the numeric predictors.
+
+```{r}
+mod2a <- lm(formula = price ~ sqft_living + lat, data = houses_tidy)
+mod2b <- lm(formula = price ~ sqft_living + view, data = houses_tidy)
+```
+
+
+_mod2a_
+
+```{r}
+autoplot(mod2a)
+```
+```{r}
+summary(mod2a)
+```
+r^2 = 0.566
+rse = 241900
+diagnostic plots look ok but there is skewness at the high end on Normal Q-Q
+`lat` is statistically significant as a predictor
+
+_mod2b_
+
+```{r}
+autoplot(mod2b)
+```
+```{r}
+summary(mod2b)
+```
+r^2 = 0.5353
+rse = 250300
+diagnostic plots look ok but there is skewness at the high end on Normal Q-Q
+`view` is statistically significant as a predictor
+
+-------------------------------------------------------------------------------
+
+The r^2 number for 'lat' is marginally higher than for `view`, so `lat` becomes our second predictor. 
+
+The r^2 number has risen from 0.4929 (`sqft_living`) to 0.566 with the addition of `lat`. 
+
+The rse has fallen from 261500 to 241900. 
+
+The regression equation is now:
+
+price =  -34160000 + (274.9 * `sqft_living`) + (717700 * `lat`)
+
+
+
