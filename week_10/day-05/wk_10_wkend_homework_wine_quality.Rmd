@@ -1,0 +1,313 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(modelr)
+library(skimr)
+```
+
+```{r}
+# load the data
+red_wine <- read_csv("data/wine_quality_red.csv")
+white_wine <- read_csv("data/wine_quality_white.csv")
+```
+
+
+*Inspect the data*
+
+```{r}
+names(red_wine)
+```
+```{r}
+names(white_wine)
+```
+Names are the same in both data sets. 
+
+```{r}
+glimpse(red_wine)
+```
+```{r}
+glimpse(white_wine)
+```
+Both data sets have the same variable names and data types. 
+
+We should join the two tables with `bind_rows()`. 
+
+```{r}
+wine <- bind_rows(red_wine, white_wine)
+```
+
+
+*Alias*
+
+Are there any aliases in the dataset?
+
+```{r}
+alias(quality ~., data = wine)
+```
+No aliases. 
+
+
+*Categorical variables & tidy-up*
+
+```{r}
+# NAs in the dataset
+colSums(is.na(wine))
+```
+Only 2 `NA` observations from ~6,500. 
+
+Remove `region` as a variable. It doesn't characterise each of the wines and is too generic to be of value. 
+
+```{r}
+wine_trim <- wine %>% 
+  select(-region, -wine_id) %>% 
+  drop_na() # remove NAs
+```
+
+Use `skim()` function to examine dataset. 
+
+```{r}
+wine_trim %>% 
+  skim() %>% 
+  view()
+```
+
+- `p_h` has values in excess of 14 and heavily left-skewed
+- `quality` values are within the expected range
+- `alcohol` has values in excess of 100abv (which cannot be correct) and is heavily right-skewed.
+- all other variables are right-skewed
+
+Plot `p_h`:
+
+```{r}
+wine_trim %>% 
+  ggplot() + 
+  aes(x = p_h) +
+  geom_bar()
+```
+Something is amiss with the `p_h` data. It should be in the range 0 - 14 but the vast majority of the values are between 300 to 400. Consider log transformation of existing variable.
+
+For `quality`, cannot convert to data type `factor` as the dependent variable cannot be categorical.
+
+All the numerical variables are skewed (most to the right) and should be log transformed for linear regression. 
+
+Variable `citric acid` has zero values which produce `inf` results when log transformed so have added small positive value (1) to each value prior to log transformation. 
+
+```{r}
+wine_trim <- wine_trim %>% 
+  mutate(log_fixed_acidity = log(fixed_acidity)) %>% 
+  mutate(log_volatile_acidity = log(volatile_acidity)) %>% 
+  mutate(log_citric_acid = log(citric_acid + 1)) %>% 
+  mutate(log_residual_sugar = log(residual_sugar)) %>% 
+  mutate(log_chlorides = log(chlorides)) %>% 
+  mutate(log_free_sulfur_dioxide = log(free_sulfur_dioxide)) %>% 
+  mutate(log_total_sulfur_dioxide = log(total_sulfur_dioxide)) %>% 
+  mutate(log_density = log(density)) %>% 
+  mutate(log_p_h = log(p_h)) %>% 
+  mutate(log_sulphates = log(sulphates)) %>% 
+  mutate(log_alcohol = log(alcohol)) %>% 
+  select(-c(fixed_acidity, volatile_acidity, citric_acid, residual_sugar, chlorides,
+            free_sulfur_dioxide, total_sulfur_dioxide, sulphates, density, p_h, alcohol))
+```
+
+View histogram of variables with skimr:
+
+```{r}
+wine_trim %>% 
+  skim() %>% 
+  view()
+```
+
+*Issues:*
+
+Distribution of variables after transformation is much improved although `log_density`, `log_ph` and `log_alcohol` all remain badly skewed.  Have tried other transformations of these variables (reciprocal and square root) but to no avail. Have decided to remove them before building the model. 
+
+
+```{r}
+# remove skewed variables
+wine_trim <- wine_trim %>% 
+  select(-c(log_density, log_p_h, log_alcohol))
+```
+
+
+*Model build*
+
+```{r, message=FALSE, warning=FALSE}
+ggpairs(wine_trim)
+```
+
+*First predictor*
+
+There appears to be (an albeit weak) correlation between `quality` and `log_volatile_acidity` and `log_chlorides`:
+
+mod1a - `log_volatile_acidity`
+mod1b - `log_chlorides`
+
+```{r}
+mod1a <- lm(quality ~ log_volatile_acidity, data = wine_trim)
+mod1b <- lm(quality ~ log_chlorides, data = wine_trim)
+```
+
+_diagnostic plots_
+
+```{r}
+autoplot(mod1a)
+```
+residual vs fitted - looks fine as the residuals appear randomly scattered around zero
+normal Q-Q - again looks fine as residuals stick close to line and so appear normally distributed 
+scale/location - fixed width band plot of residuals which is fine
+
+```{r}
+autoplot(mod1b)
+```
+again, these plots are similar to `mod1a` plots and appear fine. 
+
+_summary statistics_
+
+```{r}
+summary(mod1a)
+```
+intercept = 5.242
+r^2 = 0.05249
+rse = 0.9089
+although statistically significant, `log_volatile_acidity` explains very little of the variation in quality
+
+```{r}
+summary(mod1b)
+```
+intercept = 4.292
+r^2 = 0.05541
+rse = 0.9075
+like mod1a, `log_chlorides` is statistically significant but explains very little of the variation in `quality`.
+
+Both predictors have poor r^2 values but the better of the two is `mod1b` so we will choose `log_chlorides` as the first predictor for the model. 
+
+Model: quality = 4.29 + (-0.51 * `log_chlorides`)
+
+
+*Second predictor*
+
+
+```{r}
+# remove quality and log_chlorides from model
+wine_remaining_resid <- wine_trim %>% 
+  add_residuals(mod1b) %>% 
+  select(-c(quality, log_chlorides))
+```
+
+```{r, warning=FALSE, message=FALSE}
+# examine relationship between remaining predictors
+ggpairs(wine_remaining_resid)
+```
+
+Again, the correlation between the residuals and the remaining predictors is weak. The best of the bunch are:
+
+mod2a - `log_chlorides` + `log_volatile_acidity`
+mod2b - `log_chlorides` + `log_sulphates`
+
+```{r}
+mod2a <- lm(quality ~ log_chlorides + log_volatile_acidity, data = wine_trim)
+mod2b <- lm(quality ~ log_chlorides + log_sulphates, data = wine_trim)
+```
+
+_diagnostic plots_
+
+```{r}
+autoplot(mod2a)
+```
+Very similar to the original plots for mod1a and mod1b, the diagnostic plots look fine
+
+
+```{r}
+autoplot(mod2b)
+```
+Again, the plots look fine. 
+
+_summary statistics_
+
+```{r}
+summary(mod2a)
+```
+intercept = 4.34
+r^2 = 0.0751
+rse = 0.8981
+like the previous predictors, whilst `log_volatile_acidity` is statistically significant, the r^2 value is very small and is a poor predictor. 
+
+```{r}
+summary(mod2b)
+```
+intercept = 4.28
+r^2 = 0.0764
+rse = 0.8975
+as above, the `log_sulphates` predictor is statistically significant but with such a low r^2 number offers little to the model. That said, it provides more predictive power than `mod2a` so we choose `mod2b` to be the new model. 
+
+Model: quality = 4.29 + (-0.51 * `log_chlorides`)
+
+Model: quality = 4.28 + (-0.64 * `log_chlorides`) + (0.571 * `log_sulphates`)
+
+
+*Third predictor*
+
+```{r}
+# remove log_sulphates from model
+wine_remaining_resid <- wine_trim %>% 
+  add_residuals(mod2b) %>% 
+  select(-c(quality, log_chlorides, log_sulphates))
+```
+
+```{r, warning=FALSE, message=FALSE}
+# examine relationship between remaining predictors
+ggpairs(wine_remaining_resid)
+```
+
+Yet again, the correlation between the residuals and the remaining predictors is weak. The best of the bunch are:
+
+mod3a - `log_chlorides` + `log_sulphates` + `log_volatile_acidity`
+mod3b - `log_chlorides` + `log_sulphates` + `log_total_sulfur_dioxide`
+
+```{r}
+mod3a <- lm(quality ~ log_chlorides + log_sulphates + log_volatile_acidity, data = wine_trim)
+mod3b <- lm(quality ~ log_chlorides + log_sulphates + log_total_sulfur_dioxide, data = wine_trim)
+```
+
+_diagnostic plots_
+
+```{r}
+autoplot(mod3a)
+```
+As with the previous plots, these look fine. 
+
+
+```{r}
+autoplot(mod3b)
+```
+residual vs fitted: slight smile on the line but nothing major. 
+All other plots look fine. 
+
+_summary statistics_
+
+```{r}
+summary(mod3a)
+```
+intercept = 4.328
+r^2 = 0.099
+rse = 0.886
+like all the others before, this predictor is statistically significant but offer little predictive power
+
+```{r}
+summary(mod3b)
+```
+intercept = 4.565
+r^2 = 0.083
+rse = 0.8945
+yet again, whilst statistically significant, the predictor adds little to the model. 
+
+
+Although dire, `mod3a` offers the best results so we adopt `log_volatile_acidity` in to the model. 
+
+Model: quality = 4.328 + (-0.493 * `log_chlorides`) + (0.621 * `log_sulphates`) 
+                       + (-0.363 * `log_volatile_acidity`)
+

@@ -1,0 +1,45 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Question 1 - Using 6 variables, it's likely to be `over-fitting`. 
+
+# Question 2 - Model with AIC score of 33,559 (with AIC, lower numbers are better)
+
+# Question 3 - First model as the adjusted r-squared value is higher. 
+
+# Question 4 - 
+No. The model has generalised well to the new and unseen test data (evidenced by the lower MSE value), so we can conclude that the model is _not over-fitted_ to the training data. 
+
+# Question 5 - 
+Draw back of test-training models is that there is only one testing set of data. Therefore the performance of model is dependent on how similar or different the observations are in both sets of data. Models developed this way have a tendency to become over-fitted to the training data set. 
+
+One method to avoid this problem is to fit a model several times using a different training and testing set each time. This is called k-fold cross validation. 
+
+The dataset is divided in to `k` number of group (or folds) and the model fitted to k-1 groups and tested on the remaining k group. This is performed k times, using a different test group (fold) each time. The error recorded on the test set is the average error of all the test sets.
+
+# Question 6 - 
+Validation set is formed from the training set of data - i.e. Training set = 'Smaller' training set + Validation set.  
+
+The validation set is used as a test set for the model which has been derived from the 'smaller' training set and is used to develop the model. 
+
+The more parameters in the model or the more complex the model, the more requirement there is for a validation set of data. 
+
+# Question 7 - 
+Building a model with Backwards Selection starts with all the potential variables or predictors included in the model. 
+
+Variables are removed from the model based on their contribution to the model  - that is, the least significant predictor is removed first, followed by the second least significant and so on.
+
+This continues until a pre-defined stopping point is reached or there are no predictors left in the model. 
+
+# Question 8 -
+Backwards Selection (and Forwards Selection) exclude/include variables incrementally. Once they have been exluded/included their status cannot then change. That is, an exluded/included variable cannot then change status to become included/excluded. 
+
+However, for Best Subset Selection models, at each size of model all potential variables/predictors are considered for inclusion in to the model regardless of their status (in or out) in previous model iterations. 
+
+
+
+
+
+
