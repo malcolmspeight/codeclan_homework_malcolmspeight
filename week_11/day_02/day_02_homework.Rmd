@@ -1,0 +1,186 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(rpart)
+library(rpart.plot)
+library(tidyverse)
+library(modelr)
+
+library(tidyverse)
+titanic_set <- read_csv('data/titanic_decision_tree_data.csv')
+
+shuffle_index <- sample(1:nrow(titanic_set))
+
+# shuffle the data so class order isn't in order - need this for training/testing split later on 
+titanic_set <- titanic_set[shuffle_index, ]
+```
+
+
+## Question 1.1
+
+```{r}
+titanic_clean <- titanic_set %>% 
+  drop_na() %>% 
+  mutate(sex = as.factor(sex), 
+         survived = factor(survived, levels = c(0, 1), labels = c("No", "Yes")), 
+         class = factor(pclass, levels = c(1, 2, 3), labels = c("Upper", "Middle", "Lower")), 
+         embarked = as.factor(embarked),
+         age_status = as.factor(if_else(age <= 16, "child", "adult"))
+         ) %>%
+  select(sex, survived, class, embarked, age_status, sib_sp, parch)
+```
+
+
+## Question 1.2
+
+```{r}
+titanic_clean %>% 
+  ggplot() +
+  aes(x = class, fill = survived) +
+  geom_bar(position = "dodge") + 
+  labs(
+    title = "Passengers by class and survival status"
+  )
+```
+
+```{r}
+titanic_clean %>% 
+  ggplot() +
+  aes(x = embarked, fill = survived) +
+  geom_bar(position = "dodge") + 
+  labs(
+    title = "Passengers by embarcation point and survival status"
+  )
+```
+
+
+```{r}
+titanic_clean %>% 
+  ggplot() +
+  aes(x = sex, fill = survived) +
+  geom_bar(position = "dodge") + 
+  labs(
+    title = "Passengers by gender and survival status"
+  )
+```
+
+Many more of the wealthier survived. 
+
+More of those joining in Cherbourg and Southampton survived
+
+More women survived than men. 
+
+Variables of use: class, sex, embarcation point
+
+
+## Question 3
+
+```{r}
+# number of rows in dataset
+n_data <- nrow(titanic_set)
+
+# create a test sample index
+test_index <- sample(1:n_data, size = n_data * 0.2)
+
+# create test set
+titanic_test  <- slice(titanic_clean, test_index)
+
+# create training set
+titanic_train <- slice(titanic_clean, -test_index)
+```
+
+```{r}
+# survival split in test set
+titanic_test %>% 
+  tabyl(survived)
+```
+
+```{r}
+# survival split in train set
+titanic_train %>% 
+  tabyl(survived)
+```
+
+The split is fairly even!
+
+
+## Question 4
+
+
+```{r}
+titanic_fit <- rpart(
+  formula = survived ~ .,
+  data = titanic_train, 
+  method = "class"
+)
+
+rpart.plot(titanic_fit, 
+           yesno = 2, 
+           fallen.leaves = TRUE, 
+           faclen = 6, 
+           digits = 4)
+```
+
+## Question 5
+
+The top node indicates that the most likely outcome for passengers is `survival`. Yeah!
+Almost 68% of passengers survived from this data sample. 
+
+Moving down to the second level (below the root node):
+If you were female, you were likely to survive (94.29%). Females accounted for 48% of the total passengers. 
+If you were male, you only had a 43.42% chance of survival despite making up 52% of the total passengers. 
+
+Moving down again:
+If you were male and embarked in Queenstown or Southampton, you had a 60% chance of surviving (1 - 40%) and made up 34% of total passengers. 
+If you were male and embarked in Cherbourg, your chances of survival were 50/50 and you accounted for 18% of passengers.
+
+For those males from Cherbourg with family, you were more likely to survive (62.5%) than if you had no family with you (44.44%). 
+
+
+# Question 6
+
+```{r}
+# add predictions
+titantic_test_pred <- titanic_test %>% 
+  add_predictions(titanic_fit, type = "class")
+
+titantic_test_pred
+```
+
+```{r}
+library(yardstick)
+
+conf_mat <- titantic_test_pred %>% 
+  conf_mat(truth = survived, estimate = pred)
+
+conf_mat
+```
+
+The model correctly predicted that 11 passengers died and that 17 passengers survived. 
+
+The model incorrectly predicted that 7 passengers died when in fact they survived (false negative). 
+
+The model incorrectly predicted that 2 passengers survived when in fact they died (false positive). 
+
+
+```{r}
+accuracy <- titantic_test_pred %>% 
+  accuracy(truth = survived, estimate = pred)
+
+accuracy
+```
+The model is 76% accurate.
+
+
+
+
+
+
+
+
+
+
+
