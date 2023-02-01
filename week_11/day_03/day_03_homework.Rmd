@@ -1,0 +1,149 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(cluster)
+library(factoextra)
+library(dendextend)
+library(GGally)
+```
+
+```{r}
+mall <- read_csv("data/mall_customers.csv") %>% 
+  janitor::clean_names()
+
+glimpse(mall)
+```
+*Some visualisations*
+
+```{r}
+mall %>% 
+  ggplot() +
+  aes(x = gender, fill = gender) + 
+  geom_bar()
+```
+```{r}
+mall %>% 
+  ggplot() + 
+  aes(x = gender, y = annual_income_k, fill = gender) + 
+  geom_col() 
+```
+```{r}
+mall %>% 
+  ggplot() + 
+  aes(x = gender, y = spending_score_1_100, fill = gender) + 
+  geom_col() 
+```
+
+```{r}
+mall %>% 
+  ggplot() + 
+  aes(x = age, y = spending_score_1_100, fill = gender) + 
+  geom_col() 
+```
+
+There are more women than men in this sample.
+The women collectively have a higher income than the men.
+Collectively, the women have a higher spending_score than the men also. 
+
+
+*K means clustering*
+
+Plotting the data - maybe there are 4 or 5 clusters.
+
+```{r}
+mall %>% 
+  ggplot() +
+  aes(x = spending_score_1_100, y = annual_income_k) +
+  geom_point()
+```
+
+Use numeric methods to determine potential number of clusters.
+
+```{r}
+# scale the numeric mall data 
+mall_scale <- mall %>%
+  mutate_if(is.numeric, scale)
+```
+
+1. Elbow
+
+```{r}
+fviz_nbclust(mall_scale %>% 
+            select(spending_score_1_100, annual_income_k), 
+            FUNcluster = kmeans, 
+            method = "wss", 
+            nstart = 20)
+```
+Maybe 5 clusters?
+
+
+2. Silhouette
+
+```{r}
+fviz_nbclust(mall_scale %>% 
+            select(spending_score_1_100, annual_income_k), 
+            FUNcluster = kmeans, 
+            method = "silhouette", 
+            nstart = 20)
+```
+
+Again, looks like 5 clusters.
+
+
+3. Gap Statistic
+
+```{r}
+fviz_nbclust(mall_scale %>% 
+            select(spending_score_1_100, annual_income_k), 
+            FUNcluster = kmeans, 
+            method = "gap_stat", 
+            nstart = 20)
+```
+
+This recommends 1 cluster which isn't correct.
+
+Let's go with 5 clusters. 
+
+```{r}
+clusterings <- kmeans(
+  mall_scale %>% 
+    select(spending_score_1_100, annual_income_k), 
+  centers = 5, 
+  nstart = 20
+)
+```
+
+```{r}
+augment(clusterings, mall) %>% 
+  ggplot() +
+  aes(x = spending_score_1_100, 
+      y = annual_income_k, 
+      colour = .cluster) +
+  geom_point() + 
+  # theme(legend.position = "") +
+  labs(
+    x = "spending score", 
+    y = "annual income", 
+    title = "Shopper clusters", 
+    
+  )
+```
+
+The clustering seems a very good fit.
+
+Here are the mean scores for each of the numerical variables in the `mall` data, grouped by the cluster number.
+
+```{r}
+aggregate(mall, by=list(cluster=clusterings$cluster), mean) %>% 
+  select(-customer_id, -gender)
+```
+
+1 = older, high income, high spending
+2 = older, low income, low spending
+3 = younger, low income, high spending score
+4 = older, high inome, low spending score
+5 = middle age, high income, high spending score
