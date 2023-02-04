@@ -1,0 +1,57 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidytext)
+library(tidyverse)
+library(janeaustenr)
+```
+
+
+
+```{r}
+# create dataframe of jane austen books
+
+titles <- c("Pride and Prejudice", "Sense and Sensibility") # title list
+books <- list(prideprejudice, sensesensibility) # book list
+books <- purrr::map_chr(books, paste, collapse = " ") # mush books together
+
+ja_books_df <- tibble(
+  title = titles, 
+  text = books
+  ) %>% 
+  unnest_tokens(word, text)
+```
+
+# MVP 1
+
+```{r}
+# most common words in Pride & Prejudice and Sense & Sensibility
+ja_books_df %>% 
+  count(word, sort = TRUE)
+```
+
+# MVP 2
+
+```{r}
+# most common words in P&P and S&S, excluding stop words
+ja_books_df %>% 
+  anti_join(stop_words) %>% 
+  count(word, sort = TRUE)
+```
+
+# MVP 3
+
+```{r}
+# most common sentiment words in P&P and S&S
+ja_books_df %>% 
+  anti_join(stop_words) %>% 
+  inner_join(get_sentiments("bing")) %>% 
+  count(word, sort = TRUE)
+```
+
+
+
+

@@ -1,0 +1,118 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(modelr)
+library(pROC)
+library(broom)
+library(GGally)
+```
+
+```{r}
+juice <- read_csv("data/orange_juice.csv") %>% 
+  janitor::clean_names()
+```
+
+```{r}
+# NA values
+colSums(is.na(juice))
+```
+```{r}
+alias(purchase ~., data = juice)
+```
+
+```{r}
+glimpse(juice)
+```
+
+```{r}
+juice <- juice %>% 
+  mutate(purchase_mm = if_else(purchase == "MM", 1, 0), .after = purchase) %>% 
+  mutate(purchase_mm = as.logical(purchase_mm)) %>% 
+  mutate(special_ch = if_else(special_ch == 1, "Yes", "No")) %>%
+  mutate(special_mm = if_else(special_mm == 1, "Yes", "No")) %>% 
+  mutate(store_id = as.factor(store_id)) %>% 
+  mutate(purchase_mm = as.factor(purchase_mm)) %>% 
+  mutate_if(is.character, as.factor) %>% 
+  # remove variables as not useful
+  select(-purchase, -store7, -store) %>% 
+  # remove alias variables
+  select(-sale_price_mm, -sale_price_ch, -price_diff, -list_price_diff)
+
+glimpse(juice)
+```
+
+```{r}
+juice_purchase_model <- glm(purchase_mm ~., data = juice, family = binomial(link = "logit"))
+
+summary(juice_purchase_model)
+```
+
+```{r}
+# only use those variables that are stat significant from above model
+juice_purchase_model <- glm(purchase_mm ~ price_mm + loyal_ch + disc_mm, data = juice, family = binomial(link = "logit"))
+
+summary(juice_purchase_model)
+```
+
+Model:
+
+Purchase_mm = 6.2461 + 
+              (-1.8108 * price_mm) + 
+              (-6.2561 * loyal_ch) + 
+              (2.4509 * disc_mm)
+
+
+# ROC curves
+
+```{r}
+juice_purchase_price_mm <- glm(purchase_mm ~ price_mm, data = juice, family = binomial(link = "logit"))
+
+juice_data_with_price_mm <- juice %>% 
+  add_predictions(juice_purchase_price_mm, type = "response")
+
+juice_purchase_loyal_ch <- glm(purchase_mm ~ loyal_ch, data = juice, family = binomial(link = "logit"))
+
+juice_data_with_loyal_ch <- juice %>% 
+  add_predictions(juice_purchase_loyal_ch, type = "response")
+
+juice_purchase_disc_mm <- glm(purchase_mm ~ disc_mm, data = juice, family = binomial(link = "logit"))
+
+juice_data_with_disc_mm <- juice %>% 
+  add_predictions(juice_purchase_disc_mm, type = "response")
+```
+
+```{r}
+roc_obj_price_mm <- juice_data_with_price_mm %>% 
+  roc(response = purchase_mm, predictor = pred)
+
+roc_obj_loyal_ch <- juice_data_with_loyal_ch %>% 
+  roc(response = purchase_mm, predictor = pred)
+
+roc_obj_disc_mm <- juice_data_with_disc_mm %>% 
+  roc(response = purchase_mm, predictor = pred)
+
+roc_curve <- ggroc(data = list(
+  price_mm = roc_obj_price_mm, 
+  loyal_ch = roc_obj_loyal_ch, 
+  disc_mm = roc_obj_disc_mm), 
+  legacy.axes = TRUE) +
+  coord_fixed()
+
+roc_curve
+```
+
+
+
+
+
+
+
+
+
+
+
+
